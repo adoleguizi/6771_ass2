@@ -33,7 +33,22 @@ namespace fsv {
 		}; // iter
 
 	 public:
+		// set start pointer to string or data
+		const char* data_;
+		// set the length of view
+		std::size_t length_;
+		// set the predicate function (lambda function)
+		filter predicate_;
 		static filter default_predicate;
+		// default constructor initialize the data_ to nullptr, length_ to 0 and predicate_ to default_predicate
+		filtered_string_view()
+		: data_(nullptr)
+		, length_(0)
+		, predicate_(default_predicate){};
+		// size() implemantation
+		auto size() const -> std::size_t {
+			return length_;
+		}
 
 	 private:
 	}; // filter_string_view
