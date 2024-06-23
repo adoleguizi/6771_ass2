@@ -4,6 +4,7 @@
 #include <cassert>
 #include <compare>
 #include <functional>
+#include <iostream>
 #include <iterator>
 #include <limits>
 #include <optional>

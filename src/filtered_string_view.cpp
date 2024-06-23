@@ -8,4 +8,7 @@ int main() {
 	}
 	// Also include the max() character
 	assert(fsv::filtered_string_view::default_predicate(std::numeric_limits<char>::max()));
+	// needed to overlead the operator<< for filtered_string_view
+	auto sv = fsv::filtered_string_view{};
+	std::cout << sv.size() << std::endl;
 }
