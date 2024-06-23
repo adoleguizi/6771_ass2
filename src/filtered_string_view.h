@@ -46,9 +46,17 @@ namespace fsv {
 		: data_(nullptr)
 		, length_(0)
 		, predicate_(default_predicate){};
+
+		filtered_string_view(const std::string& str)
+		: data_(str.data())
+		, length_(str.size())
+		, predicate_(default_predicate){};
 		// size() implemantation
 		auto size() const -> std::size_t {
 			return length_;
+		}
+		auto data() const -> const char* {
+			return data_;
 		}
 
 	 private:
