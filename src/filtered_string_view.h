@@ -8,7 +8,9 @@
 #include <string>
 
 namespace fsv {
+	using filter = std::function<bool(const char&)>;
 	class filtered_string_view {
+		static filter default_predicate;
 		class iter {
 		 public:
 			using MEMBER_TYPEDEFS_GO_HERE = void;
@@ -28,10 +30,15 @@ namespace fsv {
 
 		 private:
 			/* Implementation-specific private members */
-		};
+		}; // iter
 
 	 public:
 	 private:
+	}; // filter_string_view
+	// static member definition outside class
+	filter filtered_string_view::default_predicate = [](const char& c) -> bool {
+		(void)c;
+		return true; // default predicate that accepts all chracters
 	};
 } // namespace fsv
 
