@@ -44,15 +44,19 @@ namespace fsv {
 		// default constructor initialize the data_ to nullptr, length_ to 0 and predicate_ to default_predicate
 		filtered_string_view();
 		filtered_string_view(const std::string& str);
+		filtered_string_view(const std::string& str, filter predicate);
 
-		filtered_string_view(const std::string& str, filter& predicate)
-		: data_(str.data())
-		, length_(str.size())
-		, predicate_(predicate){};
 		// size() implemantation
 		auto size() const -> std::size_t {
-			return length_;
+			std::size_t count = 0;
+			for (std::size_t i = 0; i < length_; ++i) {
+				if (predicate_(data_[i])) {
+					++count;
+				}
+			}
+			return count;
 		}
+
 		auto data() const -> const char* {
 			return data_;
 		}
