@@ -1,16 +1,16 @@
 #ifndef COMP6771_ASS2_FSV_H
 #define COMP6771_ASS2_FSV_H
 
+#include <cassert>
 #include <compare>
 #include <functional>
 #include <iterator>
+#include <limits>
 #include <optional>
 #include <string>
-
 namespace fsv {
 	using filter = std::function<bool(const char&)>;
 	class filtered_string_view {
-		static filter default_predicate;
 		class iter {
 		 public:
 			using MEMBER_TYPEDEFS_GO_HERE = void;
@@ -33,6 +33,8 @@ namespace fsv {
 		}; // iter
 
 	 public:
+		static filter default_predicate;
+
 	 private:
 	}; // filter_string_view
 	// static member definition outside class
