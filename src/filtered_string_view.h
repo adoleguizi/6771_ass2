@@ -9,6 +9,7 @@
 #include <limits>
 #include <optional>
 #include <string>
+#include <utility>
 namespace fsv {
 	using filter = std::function<bool(const char&)>;
 	class filtered_string_view {
