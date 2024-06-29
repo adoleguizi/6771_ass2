@@ -27,7 +27,7 @@ fsv::filtered_string_view::filtered_string_view(const filtered_string_view& othe
 , length_(other.length_)
 , predicate_(other.predicate_){};
 // move constructor
-fsv::filtered_string_view::filtered_string_view(filtered_string_view&& other)
+fsv::filtered_string_view::filtered_string_view(filtered_string_view&& other) noexcept
 : data_(std::exchange(other.data_, nullptr))
 , length_(std::exchange(other.length_, 0))
 , predicate_(std::exchange(other.predicate_, default_predicate)){};

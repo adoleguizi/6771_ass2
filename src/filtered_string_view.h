@@ -47,7 +47,7 @@ namespace fsv {
 		filtered_string_view(const std::string& str);
 		filtered_string_view(const std::string& str, filter predicate);
 		filtered_string_view(const filtered_string_view& other);
-		filtered_string_view(filtered_string_view&& other);
+		filtered_string_view(filtered_string_view&& other) noexcept;
 
 		// size() implemantation
 		auto size() const -> std::size_t {
