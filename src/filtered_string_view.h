@@ -64,10 +64,7 @@ namespace fsv {
 	 private:
 	}; // filter_string_view
 	// static member definition outside class
-	filter filtered_string_view::default_predicate = [](const char& c) -> bool {
-		(void)c;
-		return true; // default predicate that accepts all chracters
-	};
+
 } // namespace fsv
 
 #endif // COMP6771_ASS2_FSV_H
