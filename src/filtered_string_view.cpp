@@ -3,7 +3,7 @@
 #include "./filtered_string_view.h"
 
 // Implement here
-fsv::filtered_string_view::filtered_string_view()
+fsv::filtered_string_view::filtered_string_view() noexcept
 : data_(nullptr)
 , length_(0)
 , predicate_(default_predicate){};
@@ -12,12 +12,12 @@ fsv::filter fsv::filtered_string_view::default_predicate = [](const char& c) -> 
 	return true; // default predicate that accepts all chracters
 };
 
-fsv::filtered_string_view::filtered_string_view(const std::string& str)
+fsv::filtered_string_view::filtered_string_view(const std::string& str) noexcept
 : data_(str.data())
 , length_(str.size())
 , predicate_(default_predicate){};
 
-fsv::filtered_string_view::filtered_string_view(const std::string& str, filter predicate)
+fsv::filtered_string_view::filtered_string_view(const std::string& str, filter predicate) noexcept
 : data_(str.data())
 , length_(str.size())
 , predicate_(std::move(predicate)){};
