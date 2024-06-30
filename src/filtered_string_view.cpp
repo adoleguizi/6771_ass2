@@ -33,3 +33,13 @@ fsv::filtered_string_view::filtered_string_view(filtered_string_view&& other) no
 , predicate_(std::exchange(other.predicate_, default_predicate)){};
 // destructor
 fsv::filtered_string_view::~filtered_string_view() = default;
+// assignment operator
+auto fsv::filtered_string_view::operator=(const filtered_string_view& other) -> filtered_string_view& {
+	if (this != &other) {
+		data_ = other.data_;
+		length_ = other.length_;
+		predicate_ = other.predicate_;
+	}
+	// if self assignment do nothing
+	return *this;
+}

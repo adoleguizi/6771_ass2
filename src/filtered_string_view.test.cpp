@@ -16,3 +16,13 @@ TEST_CASE("filter me if you can") {
 
 	// REQUIRE(false);
 }
+// TEST_CASE("Copy Assignment") {
+// 	auto pred = [](const char &c) { return c == '4' || c == '2'; };
+// 	auto fsv1 = fsv::filtered_string_view{"42 bro", pred};
+// 	auto fsv2 = fsv::filtered_string_view{};
+// 	fsv2 = fsv1;
+// 	assert(fsv1 == fsv2);
+//
+//
+// 	// REQUIRE(false);
+// }
