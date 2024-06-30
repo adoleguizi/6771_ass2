@@ -30,9 +30,4 @@ TEST_CASE(" Implicit Null-Terminated String Constructor") {
 	auto sv = fsv::filtered_string_view{"cat"};
 	std::cout << sv.size() << std::endl;
 	assert(sv.size() == 3);
-
-
-
 }
-
-

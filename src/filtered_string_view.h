@@ -46,7 +46,7 @@ namespace fsv {
 		filtered_string_view() noexcept;
 		filtered_string_view(const std::string& str) noexcept;
 		filtered_string_view(const std::string& str, filter predicate) noexcept;
-		filtered_string_view(const char *str) noexcept;
+		filtered_string_view(const char* str) noexcept;
 		filtered_string_view(const filtered_string_view& other);
 		filtered_string_view(filtered_string_view&& other) noexcept;
 		~filtered_string_view();
