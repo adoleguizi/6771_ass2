@@ -31,3 +31,5 @@ fsv::filtered_string_view::filtered_string_view(filtered_string_view&& other) no
 : data_(std::exchange(other.data_, nullptr))
 , length_(std::exchange(other.length_, 0))
 , predicate_(std::exchange(other.predicate_, default_predicate)){};
+// destructor
+fsv::filtered_string_view::~filtered_string_view() = default;
