@@ -11,16 +11,24 @@ fsv::filter fsv::filtered_string_view::default_predicate = [](const char& c) -> 
 	(void)c;
 	return true; // default predicate that accepts all chracters
 };
-
+//Implicit String Constructor
 fsv::filtered_string_view::filtered_string_view(const std::string& str) noexcept
 : data_(str.data())
 , length_(str.size())
 , predicate_(default_predicate){};
-
+//String Constructor with Predicate
 fsv::filtered_string_view::filtered_string_view(const std::string& str, filter predicate) noexcept
 : data_(str.data())
 , length_(str.size())
 , predicate_(std::move(predicate)){};
+//Implicit Null-Terminated String Constructor
+fsv::filtered_string_view::filtered_string_view(const char* str) noexcept
+: data_(str)
+,length_(std::char_traits<char>::length(str))
+, predicate_(default_predicate){};
+
+
+
 // // Example usage and assertion to check that all chars are accepted
 fsv::filtered_string_view::filtered_string_view(const filtered_string_view& other)
 : data_(other.data_)
