@@ -37,3 +37,12 @@ TEST_CASE("  Null-Terminated String with Predicate Constructor") {
 	std::cout << sv.size();
 	assert(sv.size() == 1);
 }
+TEST_CASE("Copy and Move Constructors") {
+	auto sv1 = fsv::filtered_string_view{"bulldog"};
+	const auto copy = sv1;
+
+	assert(copy.data() == sv1.data()); // pointers compare equal.
+
+	const auto move = std::move(sv1);
+	assert(sv1.data() == nullptr); // true: sv1's guts were moved into `move`
+}

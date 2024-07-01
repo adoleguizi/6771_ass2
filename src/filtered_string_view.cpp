@@ -31,7 +31,7 @@ fsv::filtered_string_view::filtered_string_view(const char* str, filter predicat
 , length_(std::char_traits<char>::length(str))
 , predicate_(std::move(predicate)){};
 
-// // Example usage and assertion to check that all chars are accepted
+//  Copy and Move Constructors
 fsv::filtered_string_view::filtered_string_view(const filtered_string_view& other)
 : data_(other.data_)
 , length_(other.length_)
