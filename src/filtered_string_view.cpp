@@ -88,3 +88,19 @@ fsv::filtered_string_view::operator std::string() const {
 	}
 	return result;
 }
+// at() implementation with bounds checking and exception handling
+auto fsv::filtered_string_view::at(int index) const -> const char& {
+	if (index < 0 or static_cast<std::size_t>(index) >= length_ or length_ == 0) {
+		throw std::domain_error("filtered_string_view::at(" + std::to_string(index) + "): invalid index");
+	}
+	int count = 0;
+	for (std::size_t i = 0; i < length_; ++i) {
+		if (predicate_(data_[i])) {
+			if (count == index) {
+				return data_[i];
+			}
+			++count;
+		}
+	}
+	throw std::domain_error("filtered_string_view::at(" + std::to_string(index) + "): invalid index");
+}

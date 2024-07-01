@@ -66,3 +66,13 @@ TEST_CASE("String Type Conversion") {
 	auto s = static_cast<std::string>(sv);
 	std::cout << std::boolalpha << (sv.data() == s.data()) << std::endl;
 }
+TEST_CASE("at in vowel with predicate") {
+	auto vowels = std::set<char>{'a', 'A', 'e', 'E', 'i', 'I', 'o', 'O', 'u', 'U'};
+	auto is_vowel = [&vowels](const char& c) { return vowels.contains(c); };
+	auto sv = fsv::filtered_string_view{"Malamute", is_vowel};
+}
+TEST_CASE("AccessEmptyString", "[FilteredStringView]") {
+	fsv::filtered_string_view sv{""}; // Create an empty filtered_string_view.
+	// Verify that calling at(0) throws a std::domain_error, as expected.
+	REQUIRE_THROWS_AS(sv.at(0), std::domain_error);
+}

@@ -8,6 +8,8 @@
 #include <iterator>
 #include <limits>
 #include <optional>
+#include <set>
+#include <stdexcept>
 #include <string>
 #include <utility>
 namespace fsv {
@@ -60,6 +62,8 @@ namespace fsv {
 		auto operator[](int n) const noexcept -> const char&;
 		// String Type Conversion
 		explicit operator std::string() const;
+		// at() implementation
+		auto at(int index) const -> const char&;
 
 		// size() implemantation
 		auto size() const -> std::size_t {
