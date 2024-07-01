@@ -31,3 +31,9 @@ TEST_CASE(" Implicit Null-Terminated String Constructor") {
 	std::cout << sv.size() << std::endl;
 	assert(sv.size() == 3);
 }
+TEST_CASE("  Null-Terminated String with Predicate Constructor") {
+	auto pred = [](const char& c) { return c == 'a'; };
+	auto sv = fsv::filtered_string_view{"cat", pred};
+	std::cout << sv.size();
+	assert(sv.size() == 1);
+}

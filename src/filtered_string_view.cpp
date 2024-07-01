@@ -1,6 +1,6 @@
 
 #include "./filtered_string_view.h"
-
+#include <string_view>
 // Implement here
 fsv::filtered_string_view::filtered_string_view() noexcept
 : data_(nullptr)
@@ -25,6 +25,11 @@ fsv::filtered_string_view::filtered_string_view(const char* str) noexcept
 : data_(str)
 , length_(std::char_traits<char>::length(str))
 , predicate_(default_predicate){};
+// Null-Terminated String with Predicate Constructor
+fsv::filtered_string_view::filtered_string_view(const char* str, filter predicate) noexcept
+: data_(str)
+, length_(std::char_traits<char>::length(str))
+, predicate_(std::move(predicate)){};
 
 // // Example usage and assertion to check that all chars are accepted
 fsv::filtered_string_view::filtered_string_view(const filtered_string_view& other)
