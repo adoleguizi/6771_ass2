@@ -16,16 +16,7 @@ TEST_CASE("filter me if you can") {
 
 	// REQUIRE(false);
 }
-// TEST_CASE("Copy Assignment") {
-// 	auto pred = [](const char &c) { return c == '4' || c == '2'; };
-// 	auto fsv1 = fsv::filtered_string_view{"42 bro", pred};
-// 	auto fsv2 = fsv::filtered_string_view{};
-// 	fsv2 = fsv1;
-// 	assert(fsv1 == fsv2);
-//
-//
-// 	// REQUIRE(false);
-// }
+
 TEST_CASE(" Implicit Null-Terminated String Constructor") {
 	auto sv = fsv::filtered_string_view{"cat"};
 	std::cout << sv.size() << std::endl;
@@ -45,4 +36,21 @@ TEST_CASE("Copy and Move Constructors") {
 
 	const auto move = std::move(sv1);
 	assert(sv1.data() == nullptr); // true: sv1's guts were moved into `move`
+}
+// TEST_CASE("Copy Assignment") {
+// 	auto pred = [](const char &c) { return c == '4' || c == '2'; };
+// 	auto fsv1 = fsv::filtered_string_view{"42 bro", pred};
+// 	auto fsv2 = fsv::filtered_string_view{};
+// 	fsv2 = fsv1;
+// 	assert(fsv1 == fsv2);
+// }
+TEST_CASE("Move Assignment") {
+	auto pred = [](const char& c) { return c == '8' || c == '9'; };
+	auto fsv1 = fsv::filtered_string_view{"'89 baby", pred};
+	std::cout << fsv1.size() << std::endl;
+	auto fsv2 = fsv::filtered_string_view{};
+
+	fsv2 = std::move(fsv1);
+
+	assert(fsv1.size() == 0 && fsv1.data() == nullptr);
 }

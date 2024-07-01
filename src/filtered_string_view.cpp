@@ -53,3 +53,14 @@ auto fsv::filtered_string_view::operator=(const filtered_string_view& other) -> 
 	// if self assignment do nothing
 	return *this;
 }
+// move assignment
+auto fsv::filtered_string_view::operator=(filtered_string_view&& other) noexcept -> filtered_string_view& {
+	// check for self assignment
+	if (this != &other) {
+		// using std::exchange move other and other resouse to default
+		data_ = std::exchange(other.data_, nullptr);
+		length_ = std::exchange(other.length_, 0);
+		predicate_ = std::exchange(other.predicate_, default_predicate);
+	}
+	return *this;
+}

@@ -54,6 +54,8 @@ namespace fsv {
 		~filtered_string_view();
 
 		auto operator=(const filtered_string_view& other) -> filtered_string_view&;
+		// Move assignment
+		auto operator=(filtered_string_view&& other) noexcept -> filtered_string_view&;
 
 		// size() implemantation
 		auto size() const -> std::size_t {
