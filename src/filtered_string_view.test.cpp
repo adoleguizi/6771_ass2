@@ -54,3 +54,10 @@ TEST_CASE("Move Assignment") {
 
 	assert(fsv1.size() == 0 && fsv1.data() == nullptr);
 }
+
+TEST_CASE("Subscript") {
+	auto pred = [](const char& c) { return c == '9' || c == '0' || c == ' '; };
+	auto fsv1 = fsv::filtered_string_view{"only 90s kids understand", pred};
+	std::cout << fsv1[2] << std::endl;
+	CHECK(fsv1[2] == '0');
+}

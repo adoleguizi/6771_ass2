@@ -64,3 +64,16 @@ auto fsv::filtered_string_view::operator=(filtered_string_view&& other) noexcept
 	}
 	return *this;
 }
+// Subscript not requires bounds checking add noexcept read only const function
+auto fsv::filtered_string_view::operator[](int n) const noexcept -> const char& {
+	int count = 0;
+	for (std::size_t i = 0; i < length_; ++i) {
+		if (predicate_(data_[i])) {
+			if (count == n) {
+				return data_[i];
+			}
+			++count;
+		}
+	}
+	return data_[0];
+}
