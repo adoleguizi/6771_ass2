@@ -61,3 +61,8 @@ TEST_CASE("Subscript") {
 	std::cout << fsv1[2] << std::endl;
 	CHECK(fsv1[2] == '0');
 }
+TEST_CASE("String Type Conversion") {
+	auto sv = fsv::filtered_string_view("vizsla");
+	auto s = static_cast<std::string>(sv);
+	std::cout << std::boolalpha << (sv.data() == s.data()) << std::endl;
+}

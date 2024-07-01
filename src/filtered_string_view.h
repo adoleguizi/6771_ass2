@@ -58,6 +58,8 @@ namespace fsv {
 		auto operator=(filtered_string_view&& other) noexcept -> filtered_string_view&;
 		// Subscript
 		auto operator[](int n) const noexcept -> const char&;
+		// String Type Conversion
+		explicit operator std::string() const;
 
 		// size() implemantation
 		auto size() const -> std::size_t {

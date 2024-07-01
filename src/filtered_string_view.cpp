@@ -77,3 +77,14 @@ auto fsv::filtered_string_view::operator[](int n) const noexcept -> const char& 
 	}
 	return data_[0];
 }
+// String Type Conversion
+fsv::filtered_string_view::operator std::string() const {
+	std::string result;
+	result.reserve(length_);
+	for (std::size_t i = 0; i < length_; ++i) {
+		if (predicate_(data_[i])) {
+			result.push_back(data_[i]);
+		}
+	}
+	return result;
+}
