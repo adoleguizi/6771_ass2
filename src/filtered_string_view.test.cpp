@@ -33,6 +33,25 @@ TEST_CASE("Implicit String Constructor empty string") {
 	std::cout << sv.size() << std::endl;
 	CHECK(sv.size() == 0);
 }
+TEST_CASE("String Constructor with Predicate") {
+	auto s = std::string{"cat"};
+	auto pred = [](const char& c) { return c == 'a'; };
+	auto sv = fsv::filtered_string_view{s, pred};
+	std::cout << sv.size() << std::endl;
+	CHECK(sv.size() == 1);
+}
+TEST_CASE("String Constructor with No Matching Characters", "[FilteredStringView]") {
+	auto s = std::string{"xyz"};
+	auto pred = [](const char& c) { return c == 'a'; }; // Filter that does not match any characters in "xyz"
+	auto sv = fsv::filtered_string_view{s, pred};
+
+	std::cout << sv.size() << std::endl; // Expected output: 0
+	CHECK(sv.size() == 0); // No 'a' in "xyz"
+
+	// Verify that trying to access any index throws an exception
+	REQUIRE_THROWS_AS(sv.at(0), std::domain_error);
+}
+
 TEST_CASE(" Implicit Null-Terminated String Constructor") {
 	auto sv = fsv::filtered_string_view{"cat"};
 	std::cout << sv.size() << std::endl;
