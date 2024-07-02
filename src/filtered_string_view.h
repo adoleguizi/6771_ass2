@@ -66,9 +66,7 @@ namespace fsv {
 		// empty() declaration
 		auto empty() const -> bool;
 
-		auto data() const -> const char* {
-			return data_;
-		}
+		auto data() const noexcept -> const char*;
 
 	 private:
 		const char* data_;

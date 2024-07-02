@@ -118,3 +118,7 @@ auto fsv::filtered_string_view::size() const -> std::size_t {
 auto fsv::filtered_string_view::empty() const -> bool {
 	return size() == 0;
 }
+// data implmentation
+auto fsv::filtered_string_view::data() const noexcept -> const char* {
+	return data_;
+}

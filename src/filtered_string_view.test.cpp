@@ -192,3 +192,22 @@ TEST_CASE("empty with single match predicate") {
 	auto sv = fsv::filtered_string_view{"Labrador", [](const char& c) { return c == 'a'; }};
 	CHECK_FALSE(sv.empty());
 }
+TEST_CASE("filtered_string_view with false predicate", "[FilteredStringView]") {
+	const char* s = "Sum 42";
+	fsv::filtered_string_view sv{s, [](const char& c) {
+		                             (void)c;
+		                             return false;
+	                             }};
+
+	// Check if size is correctly reporting zero
+	CHECK(sv.size() == 0);
+
+	// Check if the data() still returns the original string despite the predicate
+	const char* ptr = sv.data();
+	std::string output;
+	for (; *ptr; ++ptr) {
+		output.push_back(*ptr);
+	}
+
+	CHECK(output == "Sum 42"); // Ensure the output matches the original string
+}
