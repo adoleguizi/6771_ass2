@@ -146,3 +146,13 @@ TEST_CASE("AccessEmptyStringWithPredicate", "[FilteredStringView]") {
 	// Verify that accessing index that is valid for the original string but not for filtered results
 	REQUIRE_THROWS_AS(sv.at(3), std::domain_error); // "banana" filtered has "aaa", index 3 is out of bounds
 }
+TEST_CASE("size of filtered_string_view") {
+	auto sv = fsv::filtered_string_view{"Maltese"};
+	std::cout << sv.size();
+	CHECK(sv.size() == 7);
+}
+TEST_CASE("size of filtered_string_view with predicate") {
+	auto sv = fsv::filtered_string_view{"Toy Poodle", [](const char& c) { return c == 'o'; }};
+	std::cout << sv.size();
+	CHECK(sv.size() == 3);
+}

@@ -104,3 +104,13 @@ auto fsv::filtered_string_view::at(int index) const -> const char& {
 	}
 	throw std::domain_error("filtered_string_view::at(" + std::to_string(index) + "): invalid index");
 }
+// size() implementation
+auto fsv::filtered_string_view::size() const -> std::size_t {
+	std::size_t count = 0;
+	for (std::size_t i = 0; i < length_; ++i) {
+		if (predicate_(data_[i])) {
+			++count;
+		}
+	}
+	return count;
+}

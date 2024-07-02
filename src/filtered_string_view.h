@@ -38,11 +38,7 @@ namespace fsv {
 
 	 public:
 		// set start pointer to string or data
-		const char* data_;
-		// set the length of view
-		std::size_t length_;
-		// set the predicate function (lambda function)
-		filter predicate_;
+
 		static filter default_predicate;
 		// default constructor initialize the data_ to nullptr, length_ to 0 and predicate_ to default_predicate
 		filtered_string_view() noexcept;
@@ -66,21 +62,18 @@ namespace fsv {
 		auto at(int index) const -> const char&;
 
 		// size() implemantation
-		auto size() const -> std::size_t {
-			std::size_t count = 0;
-			for (std::size_t i = 0; i < length_; ++i) {
-				if (predicate_(data_[i])) {
-					++count;
-				}
-			}
-			return count;
-		}
+		auto size() const -> std::size_t;
 
 		auto data() const -> const char* {
 			return data_;
 		}
 
 	 private:
+		const char* data_;
+		// set the length of view
+		std::size_t length_;
+		// set the predicate function (lambda function)
+		filter predicate_;
 	}; // filter_string_view
 	// static member definition outside class
 
