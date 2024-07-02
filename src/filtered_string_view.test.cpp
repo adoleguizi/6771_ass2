@@ -184,3 +184,11 @@ TEST_CASE("empty of filtered_string_view with predicate") {
 	std::cout << std::boolalpha << sv.empty();
 	CHECK(sv.empty());
 }
+TEST_CASE("empty with all characters matching predicate") {
+	auto sv = fsv::filtered_string_view{"Ccccc", [](const char& c) { return c == 'C' || c == 'c'; }};
+	CHECK_FALSE(sv.empty());
+}
+TEST_CASE("empty with single match predicate") {
+	auto sv = fsv::filtered_string_view{"Labrador", [](const char& c) { return c == 'a'; }};
+	CHECK_FALSE(sv.empty());
+}
