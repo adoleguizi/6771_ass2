@@ -9,33 +9,49 @@ TEST_CASE("filter me if you can") {
 	auto sv1 = fsv::filtered_string_view{"bulldog"};
 	const auto copy = sv1;
 
-	assert(copy.data() == sv1.data()); // pointers compare equal.
+	CHECK(copy.data() == sv1.data()); // pointers compare equal.
 
 	const auto move = std::move(sv1);
-	assert(sv1.data() == nullptr); // true: sv1's guts were moved into `move`
+	CHECK(sv1.data() == nullptr); // true: sv1's guts were moved into `move`
 
 	// REQUIRE(false);
 }
-
+TEST_CASE("Default Constructor") {
+	auto sv = fsv::filtered_string_view{};
+	std::cout << sv.size() << std::endl;
+	CHECK(sv.size() == 0);
+}
+TEST_CASE("Implicit String Constructor") {
+	auto s = std::string{"cat"};
+	auto sv = fsv::filtered_string_view{s};
+	std::cout << sv.size() << std::endl;
+	CHECK(sv.size() == 3);
+}
+TEST_CASE("Implicit String Constructor empty string") {
+	auto s = std::string{""};
+	auto sv = fsv::filtered_string_view{s};
+	std::cout << sv.size() << std::endl;
+	CHECK(sv.size() == 0);
+}
 TEST_CASE(" Implicit Null-Terminated String Constructor") {
 	auto sv = fsv::filtered_string_view{"cat"};
 	std::cout << sv.size() << std::endl;
-	assert(sv.size() == 3);
+	CHECK(sv.size() == 3);
 }
 TEST_CASE("  Null-Terminated String with Predicate Constructor") {
 	auto pred = [](const char& c) { return c == 'a'; };
 	auto sv = fsv::filtered_string_view{"cat", pred};
 	std::cout << sv.size();
-	assert(sv.size() == 1);
+	CHECK(sv.size() == 1);
 }
 TEST_CASE("Copy and Move Constructors") {
 	auto sv1 = fsv::filtered_string_view{"bulldog"};
 	const auto copy = sv1;
 
-	assert(copy.data() == sv1.data()); // pointers compare equal.
+	CHECK(copy.data() == sv1.data()); // pointers compare equal.
 
 	const auto move = std::move(sv1);
-	assert(sv1.data() == nullptr); // true: sv1's guts were moved into `move`
+	CHECK(sv1.data() == nullptr); // true: sv1's guts were moved into `move`
 }
 // TEST_CASE("Copy Assignment") {
 // 	auto pred = [](const char &c) { return c == '4' || c == '2'; };
@@ -52,7 +68,8 @@ TEST_CASE("Move Assignment") {
 
 	fsv2 = std::move(fsv1);
 
-	assert(fsv1.size() == 0 && fsv1.data() == nullptr);
+	CHECK(fsv1.size() == 0);
+	CHECK(fsv1.data() == nullptr);
 }
 
 TEST_CASE("Subscript") {
