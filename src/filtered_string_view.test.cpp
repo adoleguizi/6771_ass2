@@ -156,3 +156,19 @@ TEST_CASE("size of filtered_string_view with predicate") {
 	std::cout << sv.size();
 	CHECK(sv.size() == 3);
 }
+TEST_CASE("size of filtered_string_view with empty string") {
+	auto sv = fsv::filtered_string_view{""};
+	CHECK(sv.size() == 0);
+}
+TEST_CASE("size of filtered_string_view with all matching predicate", "[FilteredStringView]") {
+	auto sv = fsv::filtered_string_view{"aaaaaa", [](const char& c) { return c == 'a'; }};
+	CHECK(sv.size() == 6);
+}
+TEST_CASE("size of filtered_string_view with no matching predicate", "[FilteredStringView]") {
+	auto sv = fsv::filtered_string_view{"abcde", [](const char& c) { return c == 'z'; }};
+	CHECK(sv.size() == 0);
+}
+TEST_CASE("size of filtered_string_view with complex predicate") {
+	auto sv = fsv::filtered_string_view{"ab1c2d3e4", [](const char& c) { return isdigit(c); }};
+	CHECK(sv.size() == 4); // Only the digits should be counted
+}
