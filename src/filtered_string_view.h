@@ -68,6 +68,8 @@ namespace fsv {
 
 		auto data() const noexcept -> const char*;
 
+		auto predicate() const noexcept -> const filter&;
+
 	 private:
 		const char* data_;
 		// set the length of view

@@ -211,3 +211,24 @@ TEST_CASE("filtered_string_view with false predicate", "[FilteredStringView]") {
 
 	CHECK(output == "Sum 42"); // Ensure the output matches the original string
 }
+TEST_CASE("Predicate accessor usage with output check", "[FilteredStringView]") {
+	const auto print_and_return_true = [](const char&) {
+		std::cout << "hi!";
+		return true;
+	};
+	const auto s = fsv::filtered_string_view{"doggo", print_and_return_true};
+
+	std::stringstream buffer;
+
+	auto* coutbuf = std::cout.rdbuf();
+
+	std::cout.rdbuf(buffer.rdbuf());
+
+	const auto& pred = s.predicate();
+	pred('c'); // Call the predicate
+	std::cout.rdbuf(coutbuf);
+	// check if the output is correct
+	CHECK(buffer.str() == "hi!");
+	// validate the return value of the predicate
+	CHECK(pred('x') == true);
+}

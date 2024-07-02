@@ -122,3 +122,6 @@ auto fsv::filtered_string_view::empty() const -> bool {
 auto fsv::filtered_string_view::data() const noexcept -> const char* {
 	return data_;
 }
+auto fsv::filtered_string_view::predicate() const noexcept -> const filter& {
+	return predicate_;
+}
