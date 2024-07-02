@@ -114,3 +114,7 @@ auto fsv::filtered_string_view::size() const -> std::size_t {
 	}
 	return count;
 }
+// empty() implementation
+auto fsv::filtered_string_view::empty() const -> bool {
+	return size() == 0;
+}

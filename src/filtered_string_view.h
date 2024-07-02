@@ -63,6 +63,8 @@ namespace fsv {
 
 		// size() implemantation
 		auto size() const -> std::size_t;
+		// empty() declaration
+		auto empty() const -> bool;
 
 		auto data() const -> const char* {
 			return data_;

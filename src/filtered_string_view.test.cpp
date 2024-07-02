@@ -172,3 +172,15 @@ TEST_CASE("size of filtered_string_view with complex predicate") {
 	auto sv = fsv::filtered_string_view{"ab1c2d3e4", [](const char& c) { return isdigit(c); }};
 	CHECK(sv.size() == 4); // Only the digits should be counted
 }
+TEST_CASE("empty of filtered_string_view with empty and non-empty string") {
+	auto sv = fsv::filtered_string_view{"Australian Shephard"};
+	auto empty_sv = fsv::filtered_string_view{};
+	std::cout << std::boolalpha << sv.empty() << ' ' << empty_sv.empty();
+	CHECK_FALSE(sv.empty());
+	CHECK(empty_sv.empty());
+}
+TEST_CASE("empty of filtered_string_view with predicate") {
+	auto sv = fsv::filtered_string_view{"Border Collie", [](const char& c) { return c == 'z'; }};
+	std::cout << std::boolalpha << sv.empty();
+	CHECK(sv.empty());
+}
