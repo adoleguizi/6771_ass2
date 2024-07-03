@@ -93,6 +93,10 @@ namespace fsv {
 	auto operator<=>(const filtered_string_view& lhs, const filtered_string_view& rhs) noexcept -> std::strong_ordering;
 	// ostream operator
 	auto operator<<(std::ostream& os, const filtered_string_view& fsv) -> std::ostream&;
+	// Non-member utility functions
+	// compose
+	auto compose(const filtered_string_view& fsv, const std::vector<filter>& filts) noexcept -> filtered_string_view;
+
 } // namespace fsv
 
 #endif // COMP6771_ASS2_FSV_H

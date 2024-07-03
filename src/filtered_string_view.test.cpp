@@ -335,3 +335,18 @@ TEST_CASE("Filter non-existing character leads to empty output", "[filtered_stri
 	os << fsv;
 	REQUIRE(os.str() == ""); // Confirm that output is empty
 }
+TEST_CASE("Composite filters with compose function", "[filtered_string_view]") {
+	auto best_languages = fsv::filtered_string_view{"c / c++"};
+	// define a vector of filters
+	auto vf = std::vector<fsv::filter>{
+	    [](const char& c) { return c == 'c' || c == '+' || c == '/'; }, // 允许 'c', '+', '/'
+	    [](const char& c) { return c > ' '; }, // filter empty space
+	    [](const char&) { return true; } // no-condition filter
+	};
+	// using compose function to combine the filters
+	auto sv = fsv::compose(best_languages, vf);
+	// ostream output
+	std::ostringstream os;
+	os << sv;
+	REQUIRE(os.str() == "c/c++"); // Confirm that only 'c', '+', '/' are output
+}

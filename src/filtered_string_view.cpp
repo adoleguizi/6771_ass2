@@ -147,3 +147,17 @@ auto fsv::operator<<(std::ostream& os, const filtered_string_view& fsv) -> std::
 	os << filtered;
 	return os;
 }
+// Non-member utility functions
+// compose
+auto fsv::compose(const filtered_string_view& fsv, const std::vector<filter>& filts) noexcept -> filtered_string_view {
+	filter combined_filter = [filts](char c) {
+		for (const auto& filt : filts) {
+			if (!filt(c)) {
+				return false; // Short-circuit: if one filter returns false, the combined filter returns false
+			}
+		}
+		return true; // If all filters return true, the combined filter returns true
+	};
+	// Return a new filtered_string_view using the original string data and the combined filter
+	return filtered_string_view(fsv.data(), combined_filter);
+}
