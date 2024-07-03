@@ -232,3 +232,12 @@ TEST_CASE("Predicate accessor usage with output check", "[FilteredStringView]") 
 	// validate the return value of the predicate
 	CHECK(pred('x') == true);
 }
+
+TEST_CASE("Equality comparison") {
+	auto const lo = fsv::filtered_string_view{"aaa"};
+	auto const hi = fsv::filtered_string_view{"zzz"};
+
+	std::cout << std::boolalpha << (lo == hi) << ' ' << (lo != hi);
+	CHECK_FALSE(lo == hi);
+	CHECK(lo != hi);
+}

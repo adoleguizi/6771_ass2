@@ -125,3 +125,14 @@ auto fsv::filtered_string_view::data() const noexcept -> const char* {
 auto fsv::filtered_string_view::predicate() const noexcept -> const filter& {
 	return predicate_;
 }
+// Non-member operator
+auto fsv::operator==(const filtered_string_view& lhs, const filtered_string_view& rhs) noexcept -> bool {
+	if (lhs.size() != rhs.size()) {
+		return false;
+	}
+	return std::equal(lhs.data(), lhs.data() + lhs.size(), rhs.data());
+}
+// Inequality operator
+auto fsv::operator!=(const filtered_string_view& lhs, const filtered_string_view& rhs) noexcept -> bool {
+	return !(lhs == rhs);
+}

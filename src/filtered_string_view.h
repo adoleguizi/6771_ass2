@@ -1,6 +1,7 @@
 #ifndef COMP6771_ASS2_FSV_H
 #define COMP6771_ASS2_FSV_H
 
+#include <algorithm>
 #include <cassert>
 #include <compare>
 #include <functional>
@@ -77,7 +78,11 @@ namespace fsv {
 		// set the predicate function (lambda function)
 		filter predicate_;
 	}; // filter_string_view
-	// static member definition outside class
+	// Non-member operator
+	// Equality operator
+	auto operator==(const filtered_string_view& lhs, const filtered_string_view& rhs) noexcept -> bool;
+	// Inequality operator
+	auto operator!=(const filtered_string_view& lhs, const filtered_string_view& rhs) noexcept -> bool;
 
 } // namespace fsv
 
