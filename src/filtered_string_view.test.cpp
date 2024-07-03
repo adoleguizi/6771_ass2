@@ -254,3 +254,31 @@ TEST_CASE("Equality comparison ignores predicates") {
 	CHECK(view1 == view2);
 	CHECK_FALSE(view1 != view2);
 }
+TEST_CASE("Equality comparison with identical views") {
+	auto const view1 = fsv::filtered_string_view{"same"};
+	auto const view2 = fsv::filtered_string_view{"same"};
+
+	CHECK(view1 == view2);
+	CHECK_FALSE(view1 != view2);
+}
+TEST_CASE("Equality comparison of empty views") {
+	auto const empty1 = fsv::filtered_string_view{""};
+	auto const empty2 = fsv::filtered_string_view{""};
+
+	CHECK(empty1 == empty2);
+	CHECK_FALSE(empty1 != empty2);
+}
+TEST_CASE("Equality comparison of different lengths") {
+	auto const shorter = fsv::filtered_string_view{"short"};
+	auto const longer = fsv::filtered_string_view{"shorter"};
+
+	CHECK_FALSE(shorter == longer);
+	CHECK(shorter != longer);
+}
+TEST_CASE("Equality comparison of same length but different content") {
+	auto const alpha = fsv::filtered_string_view{"alpha"};
+	auto const beta = fsv::filtered_string_view{"betas"};
+
+	CHECK_FALSE(alpha == beta);
+	CHECK(alpha != beta);
+}
