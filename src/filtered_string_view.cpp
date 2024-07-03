@@ -161,3 +161,24 @@ auto fsv::compose(const filtered_string_view& fsv, const std::vector<filter>& fi
 	// Return a new filtered_string_view using the original string data and the combined filter
 	return filtered_string_view(fsv.data(), combined_filter);
 }
+// split utility function
+auto fsv::split(const filtered_string_view& fsv, const filtered_string_view& tok) -> std::vector<filtered_string_view> {
+	auto result = std::vector<filtered_string_view>{};
+
+	const std::string& fsv_data = fsv.data(); // Use data() as mentioned
+	const std::string& tok_data = tok.data(); // Use data() for token as well
+	if (tok_data.empty() or fsv_data.empty()) {
+		result.push_back(fsv); // If the delimiter is empty, return the original fsv as the only element.
+		return result;
+	}
+	size_t pos = 0, start = 0;
+	while ((pos = fsv_data.find(tok_data, start)) != std::string::npos) {
+		result.emplace_back(fsv_data.substr(start, pos - start), fsv.predicate()); // Add the section before the token
+		start = pos + tok_data.length(); // Move past the delimiter
+	}
+	// Handle the case where the delimiter is at the end
+	if (start <= fsv_data.length()) { // Include empty string if delimiter is at the end
+		result.emplace_back(fsv_data.substr(start), fsv.predicate());
+	}
+	return result.empty() ? std::vector<filtered_string_view>{fsv} : result;
+}

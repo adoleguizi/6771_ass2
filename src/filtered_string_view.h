@@ -97,6 +97,8 @@ namespace fsv {
 	// Non-member utility functions
 	// compose
 	auto compose(const filtered_string_view& fsv, const std::vector<filter>& filts) noexcept -> filtered_string_view;
+	// split utility function
+	auto split(const filtered_string_view& fsv, const filtered_string_view& tok) -> std::vector<filtered_string_view>;
 
 } // namespace fsv
 
