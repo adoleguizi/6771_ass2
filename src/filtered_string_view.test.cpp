@@ -300,3 +300,24 @@ TEST_CASE("Predicate-based comparisons", "[filtered_string_view]") {
 	CHECK((lower <=> upper) == std::strong_ordering::equal);
 	CHECK((lower == upper) == true);
 }
+TEST_CASE("Spaceship operator and derived comparisons", "[filtered_string_view]") {
+	auto const lo = fsv::filtered_string_view{"aaa"};
+	auto const hi = fsv::filtered_string_view{"zzz"};
+	auto const eq = fsv::filtered_string_view{"aaa"};
+
+	// Test for less than, less than or equal, greater than, greater than or equal, and exact comparison
+	CHECK((lo < hi) == true);
+	CHECK((lo <= hi) == true);
+	CHECK((hi > lo) == true);
+	CHECK((hi >= lo) == true);
+	CHECK((lo <=> hi) == std::strong_ordering::less);
+	CHECK((lo <=> eq) == std::strong_ordering::equal);
+	CHECK((hi <=> lo) == std::strong_ordering::greater);
+
+	// Edge cases: comparison with itself
+	CHECK((lo < lo) == false);
+	CHECK((lo <= lo) == true);
+	CHECK((lo > lo) == false);
+	CHECK((lo >= lo) == true);
+	CHECK((lo <=> lo) == std::strong_ordering::equal);
+}
