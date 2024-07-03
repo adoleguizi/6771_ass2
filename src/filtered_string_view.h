@@ -87,6 +87,8 @@ namespace fsv {
 	auto operator==(const filtered_string_view& lhs, const filtered_string_view& rhs) noexcept -> bool;
 	// Inequality operator
 	auto operator!=(const filtered_string_view& lhs, const filtered_string_view& rhs) noexcept -> bool;
+	// Relational operators
+	auto operator<=>(const filtered_string_view& lhs, const filtered_string_view& rhs) noexcept -> std::strong_ordering;
 
 } // namespace fsv
 

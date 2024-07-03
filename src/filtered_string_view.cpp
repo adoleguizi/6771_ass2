@@ -136,3 +136,9 @@ auto fsv::operator==(const filtered_string_view& lhs, const filtered_string_view
 auto fsv::operator!=(const filtered_string_view& lhs, const filtered_string_view& rhs) noexcept -> bool {
 	return !(lhs == rhs);
 }
+// Relational Comparison
+auto fsv::operator<=>(const filtered_string_view& lhs, const filtered_string_view& rhs) noexcept -> std::strong_ordering {
+	std::string ls = lhs.operator std::string();
+	std::string rs = rhs.operator std::string();
+	return ls <=> rs;
+}
