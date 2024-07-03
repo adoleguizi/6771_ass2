@@ -4,6 +4,7 @@
 #include <algorithm>
 #include <cassert>
 #include <compare>
+#include <cstring>
 #include <functional>
 #include <iostream>
 #include <iterator>
@@ -77,6 +78,9 @@ namespace fsv {
 		std::size_t length_;
 		// set the predicate function (lambda function)
 		filter predicate_;
+		// friend operator
+		friend auto operator==(const filtered_string_view& lhs, const filtered_string_view& rhs) noexcept -> bool;
+		friend auto operator!=(const filtered_string_view& lhs, const filtered_string_view& rhs) noexcept -> bool;
 	}; // filter_string_view
 	// Non-member operator
 	// Equality operator

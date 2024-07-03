@@ -241,3 +241,16 @@ TEST_CASE("Equality comparison") {
 	CHECK_FALSE(lo == hi);
 	CHECK(lo != hi);
 }
+TEST_CASE("Equality comparison ignores predicates") {
+	const char* text1 = "example";
+	const char* text2 = "example";
+	auto predicate1 = [](char c) { return c == 'a'; };
+	auto predicate2 = [](char c) { return c == 'e'; };
+
+	auto const view1 = fsv::filtered_string_view{text1, predicate1};
+	auto const view2 = fsv::filtered_string_view{text2, predicate2};
+
+	// Check if the views are equal despite having different predicates
+	CHECK(view1 == view2);
+	CHECK_FALSE(view1 != view2);
+}

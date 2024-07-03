@@ -127,10 +127,10 @@ auto fsv::filtered_string_view::predicate() const noexcept -> const filter& {
 }
 // Non-member operator
 auto fsv::operator==(const filtered_string_view& lhs, const filtered_string_view& rhs) noexcept -> bool {
-	if (lhs.size() != rhs.size()) {
+	if (lhs.length_ != rhs.length_) {
 		return false;
 	}
-	return std::equal(lhs.data(), lhs.data() + lhs.size(), rhs.data());
+	return std::memcmp(lhs.data_, rhs.data_, lhs.length_) == 0;
 }
 // Inequality operator
 auto fsv::operator!=(const filtered_string_view& lhs, const filtered_string_view& rhs) noexcept -> bool {
