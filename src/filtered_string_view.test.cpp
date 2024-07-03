@@ -350,3 +350,34 @@ TEST_CASE("Composite filters with compose function", "[filtered_string_view]") {
 	os << sv;
 	REQUIRE(os.str() == "c/c++"); // Confirm that only 'c', '+', '/' are output
 }
+TEST_CASE("Handling empty string with filters", "[filtered_string_view]") {
+	auto empty_fsv = fsv::filtered_string_view{""};
+	auto filters = std::vector<fsv::filter>{[](char c) {
+		                                        (void)c;
+		                                        return true;
+	                                        },
+	                                        [](char c) { return c == 'a'; }};
+
+	auto composed_fsv = fsv::compose(empty_fsv, filters);
+	std::ostringstream os;
+	os << composed_fsv;
+	REQUIRE(os.str().empty()); // 确认输出为空字符串
+}
+TEST_CASE("Compose with no filters", "[filtered_string_view]") {
+	auto fsv = fsv::filtered_string_view{"Test string"};
+	auto empty_filters = std::vector<fsv::filter>{};
+
+	auto composed_fsv = fsv::compose(fsv, empty_filters);
+	std::ostringstream os;
+	os << composed_fsv;
+	REQUIRE(os.str() == "Test string"); // 验证输出与输入相同
+}
+TEST_CASE("All filters reject", "[filtered_string_view]") {
+	auto fsv = fsv::filtered_string_view{"c++ > rust > java"};
+	auto reject_all = std::vector<fsv::filter>{[](char) { return false; }, [](char) { return false; }};
+
+	auto composed_fsv = fsv::compose(fsv, reject_all);
+	std::ostringstream os;
+	os << composed_fsv;
+	REQUIRE(os.str().empty()); // 确认输出为空
+}

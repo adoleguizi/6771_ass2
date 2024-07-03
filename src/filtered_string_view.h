@@ -16,6 +16,7 @@
 #include <stdexcept>
 #include <string>
 #include <utility>
+#include <vector>
 namespace fsv {
 	using filter = std::function<bool(const char&)>;
 	class filtered_string_view {
