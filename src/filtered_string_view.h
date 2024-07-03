@@ -12,6 +12,7 @@
 #include <limits>
 #include <optional>
 #include <set>
+#include <sstream>
 #include <stdexcept>
 #include <string>
 #include <utility>
@@ -90,7 +91,8 @@ namespace fsv {
 	auto operator!=(const filtered_string_view& lhs, const filtered_string_view& rhs) noexcept -> bool;
 	// Relational operators
 	auto operator<=>(const filtered_string_view& lhs, const filtered_string_view& rhs) noexcept -> std::strong_ordering;
-
+	// ostream operator
+	auto operator<<(std::ostream& os, const filtered_string_view& fsv) -> std::ostream&;
 } // namespace fsv
 
 #endif // COMP6771_ASS2_FSV_H

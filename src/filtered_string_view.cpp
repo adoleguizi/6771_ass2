@@ -141,3 +141,9 @@ auto fsv::operator<=>(const filtered_string_view& lhs, const filtered_string_vie
 	std::string rs = rhs.operator std::string();
 	return ls <=> rs;
 }
+// Output stream
+auto fsv::operator<<(std::ostream& os, const filtered_string_view& fsv) -> std::ostream& {
+	std::string filtered = static_cast<std::string>(fsv);
+	os << filtered;
+	return os;
+}

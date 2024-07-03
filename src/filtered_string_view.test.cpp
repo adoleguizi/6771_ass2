@@ -321,3 +321,17 @@ TEST_CASE("Spaceship operator and derived comparisons", "[filtered_string_view]"
 	CHECK((lo >= lo) == true);
 	CHECK((lo <=> lo) == std::strong_ordering::equal);
 }
+TEST_CASE("Filter only 'c' and '+' characters", "[filtered_string_view]") {
+	auto fsv = fsv::filtered_string_view{"c++ > rust > java", [](const char& c) { return c == 'c' || c == '+'; }};
+	std::ostringstream os;
+	os << fsv;
+	REQUIRE(os.str() == "c++"); // Confirm that only 'c' and '+' are output
+}
+TEST_CASE("Filter non-existing character leads to empty output", "[filtered_string_view]") {
+	auto fsv = fsv::filtered_string_view{"c++ > rust > java", [](const char& c) {
+		                                     return c == 'x'; // Non-existing character in the string
+	                                     }};
+	std::ostringstream os;
+	os << fsv;
+	REQUIRE(os.str() == ""); // Confirm that output is empty
+}
