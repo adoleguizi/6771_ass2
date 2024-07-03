@@ -29,7 +29,7 @@ fsv::filtered_string_view::filtered_string_view(const char* str) noexcept
 fsv::filtered_string_view::filtered_string_view(const char* str, filter predicate) noexcept
 : data_(str)
 , length_(std::char_traits<char>::length(str))
-, predicate_(std::move(predicate)){};
+, predicate_(predicate){};
 
 //  Copy and Move Constructors
 fsv::filtered_string_view::filtered_string_view(const filtered_string_view& other)
@@ -79,7 +79,7 @@ auto fsv::filtered_string_view::operator[](int n) const noexcept -> const char& 
 }
 // String Type Conversion
 fsv::filtered_string_view::operator std::string() const {
-	std::string result;
+	std::string result = {};
 	result.reserve(length_);
 	for (std::size_t i = 0; i < length_; ++i) {
 		if (predicate_(data_[i])) {
@@ -127,10 +127,9 @@ auto fsv::filtered_string_view::predicate() const noexcept -> const filter& {
 }
 // Non-member operator
 auto fsv::operator==(const filtered_string_view& lhs, const filtered_string_view& rhs) noexcept -> bool {
-	if (lhs.length_ != rhs.length_) {
-		return false;
-	}
-	return std::memcmp(lhs.data_, rhs.data_, lhs.length_) == 0;
+	std::string ls = lhs.operator std::string();
+	std::string rs = rhs.operator std::string();
+	return ls == rs;
 }
 // Inequality operator
 auto fsv::operator!=(const filtered_string_view& lhs, const filtered_string_view& rhs) noexcept -> bool {

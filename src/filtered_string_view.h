@@ -3,6 +3,7 @@
 
 #include <algorithm>
 #include <cassert>
+#include <cctype>
 #include <compare>
 #include <cstring>
 #include <functional>
@@ -79,8 +80,8 @@ namespace fsv {
 		// set the predicate function (lambda function)
 		filter predicate_;
 		// friend operator
-		friend auto operator==(const filtered_string_view& lhs, const filtered_string_view& rhs) noexcept -> bool;
-		friend auto operator!=(const filtered_string_view& lhs, const filtered_string_view& rhs) noexcept -> bool;
+		// auto operator==(const filtered_string_view& lhs, const filtered_string_view& rhs) noexcept -> bool;
+		// auto operator!=(const filtered_string_view& lhs, const filtered_string_view& rhs) noexcept -> bool;
 	}; // filter_string_view
 	// Non-member operator
 	// Equality operator

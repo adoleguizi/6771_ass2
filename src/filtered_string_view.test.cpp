@@ -241,19 +241,19 @@ TEST_CASE("Equality comparison") {
 	CHECK_FALSE(lo == hi);
 	CHECK(lo != hi);
 }
-TEST_CASE("Equality comparison ignores predicates") {
-	const char* text1 = "example";
-	const char* text2 = "example";
-	auto predicate1 = [](char c) { return c == 'a'; };
-	auto predicate2 = [](char c) { return c == 'e'; };
-
-	auto const view1 = fsv::filtered_string_view{text1, predicate1};
-	auto const view2 = fsv::filtered_string_view{text2, predicate2};
-
-	// Check if the views are equal despite having different predicates
-	CHECK(view1 == view2);
-	CHECK_FALSE(view1 != view2);
-}
+// TEST_CASE("Equality comparison ignores predicates") {
+// 	const char* text1 = "example";
+// 	const char* text2 = "example";
+// 	auto predicate1 = [](char c) { return c == 'a'; };
+// 	auto predicate2 = [](char c) { return c == 'e'; };
+//
+// 	auto const view1 = fsv::filtered_string_view{text1, predicate1};
+// 	auto const view2 = fsv::filtered_string_view{text2, predicate2};
+//
+// 	// Check if the views are equal despite having different predicates
+// 	CHECK(view1 == view2);
+// 	CHECK_FALSE(view1 != view2);
+// }
 TEST_CASE("Equality comparison with identical views") {
 	auto const view1 = fsv::filtered_string_view{"same"};
 	auto const view2 = fsv::filtered_string_view{"same"};
@@ -281,4 +281,22 @@ TEST_CASE("Equality comparison of same length but different content") {
 
 	CHECK_FALSE(alpha == beta);
 	CHECK(alpha != beta);
+}
+TEST_CASE("Predicate-based comparisons", "[filtered_string_view]") {
+	std::function<bool(char)> is_lower = [](char c) { return std::islower(c); };
+	auto const lower = fsv::filtered_string_view{"abcdABCD", is_lower};
+	auto const upper = fsv::filtered_string_view{"ABCDabcd", is_lower};
+	// 输出转换后的字符串以确认过滤效果
+	std::string lower_str = lower.operator std::string();
+	std::string upper_str = upper.operator std::string();
+	std::cout << "Lower filtered: " << lower_str << std::endl;
+	std::cout << "Upper filtered: " << upper_str << std::endl;
+
+	// 检查过滤后的字符串是否如预期
+	CHECK(lower_str == "abcd");
+	CHECK(upper_str == "abcd");
+
+	// 谓词过滤后实际上两个字符串都应视为 "abcd"
+	CHECK((lower <=> upper) == std::strong_ordering::equal);
+	CHECK((lower == upper) == true);
 }
