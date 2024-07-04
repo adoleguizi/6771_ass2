@@ -413,3 +413,27 @@ TEST_CASE("Split on single character with multiple with other characters") {
 
 	CHECK(v == expected);
 }
+TEST_CASE("Split with no delimiters present", "[split]") {
+	auto sv = fsv::filtered_string_view{"abc"};
+	auto tok = fsv::filtered_string_view{"x"};
+	auto v = fsv::split(sv, tok);
+	auto expected = std::vector<fsv::filtered_string_view>{"abc"};
+
+	CHECK(v == expected);
+}
+TEST_CASE("Split with delimiter at the end", "[split]") {
+	auto sv = fsv::filtered_string_view{"abx"};
+	auto tok = fsv::filtered_string_view{"x"};
+	auto v = fsv::split(sv, tok);
+	auto expected = std::vector<fsv::filtered_string_view>{"ab", ""};
+
+	CHECK(v == expected);
+}
+TEST_CASE("Split with delimiter at the start", "[split]") {
+	auto sv = fsv::filtered_string_view{"xab"};
+	auto tok = fsv::filtered_string_view{"x"};
+	auto v = fsv::split(sv, tok);
+	auto expected = std::vector<fsv::filtered_string_view>{"", "ab"};
+
+	CHECK(v == expected);
+}
