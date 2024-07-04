@@ -52,6 +52,8 @@ namespace fsv {
 		filtered_string_view(const char* str) noexcept;
 		// NULL terminated string constructor with predicate constructor
 		filtered_string_view(const char* str, filter predicate) noexcept;
+		// add new constructor
+		filtered_string_view(const char* base, size_t pos, size_t len, filter pred) noexcept;
 		filtered_string_view(const filtered_string_view& other);
 		filtered_string_view(filtered_string_view&& other) noexcept;
 		~filtered_string_view();

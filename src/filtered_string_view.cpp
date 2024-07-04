@@ -1,6 +1,6 @@
 
 #include "./filtered_string_view.h"
-#include <string_view>
+
 // Implement here
 fsv::filtered_string_view::filtered_string_view() noexcept
 : data_(nullptr)
@@ -19,7 +19,7 @@ fsv::filtered_string_view::filtered_string_view(const std::string& str) noexcept
 fsv::filtered_string_view::filtered_string_view(const std::string& str, filter predicate) noexcept
 : data_(str.data())
 , length_(str.size())
-, predicate_(std::move(predicate)){};
+, predicate_(predicate){};
 // Implicit Null-Terminated String Constructor
 fsv::filtered_string_view::filtered_string_view(const char* str) noexcept
 : data_(str)
@@ -161,24 +161,37 @@ auto fsv::compose(const filtered_string_view& fsv, const std::vector<filter>& fi
 	// Return a new filtered_string_view using the original string data and the combined filter
 	return filtered_string_view(fsv.data(), combined_filter);
 }
+fsv::filtered_string_view::filtered_string_view(const char* base, size_t pos, size_t len, filter pred) noexcept
+: data_(base + pos)
+, length_(len)
+, predicate_(pred){};
 // split utility function
+// Example of potentially fixed split function
+// split function
 auto fsv::split(const filtered_string_view& fsv, const filtered_string_view& tok) -> std::vector<filtered_string_view> {
 	auto result = std::vector<filtered_string_view>{};
+	std::string filtered_fsv = static_cast<std::string>(fsv);
+	std::string tok_data = static_cast<std::string>(tok);
 
-	const std::string& fsv_data = fsv.data(); // Use data() as mentioned
-	const std::string& tok_data = tok.data(); // Use data() for token as well
-	if (tok_data.empty() or fsv_data.empty()) {
-		result.push_back(fsv); // If the delimiter is empty, return the original fsv as the only element.
+	if (tok_data.empty() or filtered_fsv.empty()) {
+		result.push_back(fsv);
 		return result;
 	}
+
 	size_t pos = 0, start = 0;
-	while ((pos = fsv_data.find(tok_data, start)) != std::string::npos) {
-		result.emplace_back(fsv_data.substr(start, pos - start), fsv.predicate()); // Add the section before the token
-		start = pos + tok_data.length(); // Move past the delimiter
+	while ((pos = filtered_fsv.find(tok_data, start)) != std::string::npos) {
+		if (pos > start) {
+			result.emplace_back(filtered_fsv.data(), start, pos - start, fsv.predicate()); // Adjusted to pass start and
+			                                                                               // length
+		}
+		start = pos + tok_data.length();
 	}
-	// Handle the case where the delimiter is at the end
-	if (start <= fsv_data.length()) { // Include empty string if delimiter is at the end
-		result.emplace_back(fsv_data.substr(start), fsv.predicate());
+
+	if (start < filtered_fsv.length()) {
+		result.emplace_back(filtered_fsv.data(), start, filtered_fsv.length() - start, fsv.predicate());
+	}
+	else if (start == filtered_fsv.length()) {
+		result.emplace_back(filtered_fsv.data(), start, 0, fsv.predicate()); // Empty segment at the end
 	}
 	return result.empty() ? std::vector<filtered_string_view>{fsv} : result;
 }
