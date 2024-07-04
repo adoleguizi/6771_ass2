@@ -437,3 +437,20 @@ TEST_CASE("Split with delimiter at the start", "[split]") {
 
 	CHECK(v == expected);
 }
+TEST_CASE("Test substr on filtered_string_view", "[substr]") {
+	auto sv = fsv::filtered_string_view{"Siberian Husky"};
+	auto sub_sv = fsv::substr(sv, 9); // 从索引 9 开始获取子字符串
+	auto result = static_cast<std::string>(sub_sv); // 将 filtered_string_view 转换为 std::string 来检查
+
+	CHECK(result == "Husky"); // 检查是否正确获得 "Husky"
+}
+TEST_CASE("Test substr on filtered_string_view with custom predicate", "[substr]") {
+	// 定义一个简单的谓词函数对象，只接受 'S' 和 'D'
+	auto only_SD = [](const char& c) { return c == 'S' || c == 'D'; };
+	// 创建 filtered_string_view 实例，过滤后的字符串应该是 "SD"
+	fsv::filtered_string_view sv{"Sled Dog", only_SD};
+	// 测试 substr 获取过滤后的字符串的子字符串
+	auto sub_view = fsv::substr(sv, 0, 2);
+	// 使用 CHECK 验证 substr 的结果是否符合预期
+	CHECK(static_cast<std::string>(sub_view) == "SD");
+}

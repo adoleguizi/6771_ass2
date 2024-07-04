@@ -201,3 +201,21 @@ auto fsv::split(const filtered_string_view& fsv, const filtered_string_view& tok
 	}
 	return parts.empty() ? std::vector<filtered_string_view>{fsv} : parts;
 }
+// subscript utility fucntion
+auto fsv::substr(const filtered_string_view& fsv, int pos, int count) noexcept -> filtered_string_view {
+	if (pos < 0) {
+		pos = 0;
+	}
+	if (static_cast<size_t>(pos) >= fsv.size()) {
+		return filtered_string_view("", 0, fsv.predicate());
+	}
+	std::vector<size_t> indices = fsv.filtered_indices();
+	if (indices.empty() || pos >= static_cast<int>(indices.size())) {
+		return filtered_string_view("", 0, fsv.predicate());
+	}
+	size_t start_index = indices[static_cast<size_t>(pos)];
+	size_t end_index = (count > 0 && static_cast<size_t>(pos + count) < indices.size())
+	                       ? indices[static_cast<size_t>(pos + count) - 1] + 1
+	                       : indices.back() + 1;
+	return filtered_string_view(fsv.data() + start_index, end_index - start_index, fsv.predicate());
+}

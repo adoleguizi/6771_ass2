@@ -77,6 +77,16 @@ namespace fsv {
 
 		auto predicate() const noexcept -> const filter&;
 
+		std::vector<std::size_t> filtered_indices() const {
+			std::vector<std::size_t> indices;
+			for (std::size_t i = 0; i < length_; ++i) {
+				if (predicate_(data_[i])) {
+					indices.push_back(i);
+				}
+			}
+			return indices;
+		}
+
 	 private:
 		const char* data_;
 		// set the length of view
@@ -101,6 +111,8 @@ namespace fsv {
 	auto compose(const filtered_string_view& fsv, const std::vector<filter>& filts) noexcept -> filtered_string_view;
 	// split utility function
 	auto split(const filtered_string_view& fsv, const filtered_string_view& tok) -> std::vector<filtered_string_view>;
+	// substring utility function
+	auto substr(const filtered_string_view& fsv, int pos = 0, int count = 0) noexcept -> filtered_string_view;
 
 } // namespace fsv
 
