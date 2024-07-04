@@ -381,3 +381,35 @@ TEST_CASE("All filters reject", "[filtered_string_view]") {
 	os << composed_fsv;
 	REQUIRE(os.str().empty()); // 确认输出为空
 }
+TEST_CASE("Split filtered_string_view on delimiter", "[split]") {
+	// 定义字符集合
+	std::set<char> interest = {'a', 'A', 'b', 'B', 'c', 'C', 'd', 'D', 'e', 'E', 'f', 'F', ' ', '/'};
+	// 创建 filtered_string_view 实例
+	fsv::filtered_string_view sv{"0xDEADBEEF / 0xdeadbeef", [&interest](const char& c) { return interest.contains(c); }};
+	// 分隔符
+	fsv::filtered_string_view tok{" / "};
+
+	// 执行分割操作
+	auto v = fsv::split(sv, tok);
+
+	// 检查分割后的数量和内容
+	REQUIRE(v.size() == 2); // 确保正确地分割为两部分
+	CHECK(v[0] == fsv::filtered_string_view{"DEADBEEF"}); // 检查第一部分内容
+	CHECK(v[1] == fsv::filtered_string_view{"deadbeef"}); // 检查第二部分内容
+}
+TEST_CASE("Split on single character with multiple occurrences", "[split]") {
+	auto sv = fsv::filtered_string_view{"xx"};
+	auto tok = fsv::filtered_string_view{"x"};
+	auto v = fsv::split(sv, tok);
+	auto expected = std::vector<fsv::filtered_string_view>{"", "", ""};
+
+	CHECK(v == expected);
+}
+TEST_CASE("Split on single character with multiple with other characters") {
+	auto sv = fsv::filtered_string_view{"xbx"};
+	auto tok = fsv::filtered_string_view{"x"};
+	auto v = fsv::split(sv, tok);
+	auto expected = std::vector<fsv::filtered_string_view>{"", "b", ""};
+
+	CHECK(v == expected);
+}
