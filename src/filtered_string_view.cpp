@@ -161,37 +161,43 @@ auto fsv::compose(const filtered_string_view& fsv, const std::vector<filter>& fi
 	// Return a new filtered_string_view using the original string data and the combined filter
 	return filtered_string_view(fsv.data(), combined_filter);
 }
-fsv::filtered_string_view::filtered_string_view(const char* base, size_t pos, size_t len, filter pred) noexcept
-: data_(base + pos)
-, length_(len)
-, predicate_(pred){};
-// split utility function
-// Example of potentially fixed split function
-// split function
+
+fsv::filtered_string_view::filtered_string_view(const char* data, size_t length, filter pred) noexcept
+: data_(data)
+, length_(length)
+, predicate_(pred) {}
+
 auto fsv::split(const filtered_string_view& fsv, const filtered_string_view& tok) -> std::vector<filtered_string_view> {
-	auto result = std::vector<filtered_string_view>{};
-	std::string filtered_fsv = static_cast<std::string>(fsv);
-	std::string tok_data = static_cast<std::string>(tok);
-
-	if (tok_data.empty() or filtered_fsv.empty()) {
-		result.push_back(fsv);
-		return result;
+	std::vector<filtered_string_view> parts;
+	if (tok.size() == 0) {
+		parts.push_back(fsv);
+		return parts;
 	}
 
-	size_t pos = 0, start = 0;
-	while ((pos = filtered_fsv.find(tok_data, start)) != std::string::npos) {
-		if (pos > start) {
-			result.emplace_back(filtered_fsv.data(), start, pos - start, fsv.predicate()); // Adjusted to pass start and
-			                                                                               // length
+	const char* base = fsv.data();
+	const char* current = base;
+	const char* end = base + strlen(base); // using strlen to get the length of the string
+	const char* delim_start = tok.data();
+	size_t delim_size = strlen(delim_start); // using strlen to get the length of the string
+
+	while (current < end) {
+		const char* found = std::search(current, end, delim_start, delim_start + delim_size);
+		if (found != current) {
+			parts.emplace_back(current, found - current, fsv.predicate()); // add current part
 		}
-		start = pos + tok_data.length();
+		else {
+			parts.emplace_back("", 0, fsv.predicate()); // deal with empty part
+		}
+		current = found + delim_size;
+		if (found == end)
+			break;
 	}
-
-	if (start < filtered_fsv.length()) {
-		result.emplace_back(filtered_fsv.data(), start, filtered_fsv.length() - start, fsv.predicate());
+	if (current < end) {
+		parts.emplace_back(current, end - current, fsv.predicate());
 	}
-	else if (start == filtered_fsv.length()) {
-		result.emplace_back(filtered_fsv.data(), start, 0, fsv.predicate()); // Empty segment at the end
+	else if (current == end && delim_size > 0 && end != base) {
+		// 处理字符串末尾是分隔符的情况
+		parts.emplace_back("", 0, fsv.predicate());
 	}
-	return result.empty() ? std::vector<filtered_string_view>{fsv} : result;
+	return parts.empty() ? std::vector<filtered_string_view>{fsv} : parts;
 }
