@@ -454,3 +454,31 @@ TEST_CASE("Test substr on filtered_string_view with custom predicate", "[substr]
 	// 使用 CHECK 验证 substr 的结果是否符合预期
 	CHECK(static_cast<std::string>(sub_view) == "SD");
 }
+TEST_CASE("Test substr on filtered_string_view with negative start", "[substr]") {
+	auto sv = fsv::filtered_string_view{"Example"};
+	auto sub_sv = fsv::substr(sv, -5); // Trying negative start index
+	auto result = static_cast<std::string>(sub_sv);
+
+	CHECK(result == "Example"); // As negative start should clamp to zero and return the whole string
+}
+TEST_CASE("Test substr with count exceeding filtered_string_view size", "[substr]") {
+	auto sv = fsv::filtered_string_view{"Example"};
+	auto sub_sv = fsv::substr(sv, 3, 20); // Start at index 3 with count exceeding size of string
+	auto result = static_cast<std::string>(sub_sv);
+
+	CHECK(result == "mple"); // Should return the substring from index 3 to end
+}
+TEST_CASE("Test substr on empty filtered_string_view", "[substr]") {
+	auto sv = fsv::filtered_string_view{""};
+	auto sub_sv = fsv::substr(sv, 0, 1); // Substring on an empty string
+	auto result = static_cast<std::string>(sub_sv);
+
+	CHECK(result.empty()); // Should return an empty string
+}
+TEST_CASE("Test substr on filtered_string_view with end boundary", "[substr]") {
+	auto sv = fsv::filtered_string_view{"Example"};
+	auto sub_sv = fsv::substr(sv, 4, 3); // Proper substring that fits exactly to the end
+	auto result = static_cast<std::string>(sub_sv);
+
+	CHECK(result == "ple"); // Should correctly handle the boundary condition
+}
