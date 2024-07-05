@@ -506,3 +506,30 @@ TEST_CASE("Test begin and end on empty string", "[filtered_string_view]") {
 	fsv::filtered_string_view empty_fsv{""};
 	CHECK(empty_fsv.begin() == empty_fsv.end());
 }
+TEST_CASE("Test begin and end with no matching characters", "[filtered_string_view]") {
+	auto no_vowels = [](const char& c) { return c != 'a' && c != 'e' && c != 'i' && c != 'o' && c != 'u'; };
+	fsv::filtered_string_view fsv{"aeiou", no_vowels};
+	CHECK(fsv.begin() == fsv.end());
+}
+TEST_CASE("Test begin and end where all characters match", "[filtered_string_view]") {
+	auto all_letters = [](const char& c) { return std::isalpha(c); };
+	fsv::filtered_string_view fsv{"abc", all_letters};
+	auto it = fsv.begin();
+	CHECK(it != fsv.end());
+	CHECK(*it == 'a');
+	CHECK(*(++it) == 'b');
+	CHECK(*(++it) == 'c');
+	CHECK(++it == fsv.end());
+}
+TEST_CASE("Test begin and end on actual data", "[filtered_string_view]") {
+	auto no_spaces = [](const char& c) { return !std::isspace(c); };
+	fsv::filtered_string_view fsv{"hello world", no_spaces};
+	auto it = fsv.begin();
+	CHECK(it != fsv.end());
+	CHECK(*it == 'h'); // 首个非空格字符
+	std::advance(it, 5);
+	CHECK(*it == 'w'); // 跳过空格，到达 'w'
+	std::advance(it, 4);
+	CHECK(*it == 'd'); // 最后一个字符
+	CHECK(++it == fsv.end());
+}
