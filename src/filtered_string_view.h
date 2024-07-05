@@ -45,15 +45,20 @@ namespace fsv {
 			auto operator--() -> iter&;
 			auto operator--(int) -> iter;
 
-			friend auto operator==(const iter&, const iter&) -> bool;
-			friend auto operator!=(const iter&, const iter&) -> bool;
+			friend auto operator==(const iter& lhs, const iter& rhs) -> bool {
+				// 先检查迭代器是否来自同一个容器
+				return lhs.container_ == rhs.container_ && lhs.ptr_ == rhs.ptr_;
+			}
+			friend auto operator!=(const iter& rhs, const iter& lhs) -> bool {
+				return !(lhs == rhs);
+			}
 
 		 private:
 			/* Implementation-specific private members */
 			const char* ptr_;
 			const filtered_string_view* container_;
 
-			// friend class filtered_string_view;
+			friend class filtered_string_view;
 
 		}; // iter
 
