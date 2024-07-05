@@ -219,3 +219,11 @@ auto fsv::substr(const filtered_string_view& fsv, int pos, int count) noexcept -
 	                       : indices.back() + 1;
 	return filtered_string_view(fsv.data() + start_index, end_index - start_index, fsv.predicate());
 }
+// iterator personal constructor
+fsv::filtered_string_view::iter::iter(const char* ptr, const filtered_string_view* container) noexcept
+: ptr_(ptr)
+, container_(container) {}
+// iterator default constructor
+auto fsv::filtered_string_view::iter::operator*() const -> reference {
+	return *ptr_;
+}

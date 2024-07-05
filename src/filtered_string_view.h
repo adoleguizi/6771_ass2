@@ -34,6 +34,8 @@ namespace fsv {
 
 			//
 			iter() = default;
+			// Constructors
+			iter(const char* ptr = nullptr, const filtered_string_view* container = nullptr) noexcept;
 
 			auto operator*() const -> reference; // change this
 			auto operator->() const -> pointer; // change this
@@ -48,10 +50,18 @@ namespace fsv {
 
 		 private:
 			/* Implementation-specific private members */
+			const char* ptr_;
+			const filtered_string_view* container_;
+
+			// friend class filtered_string_view;
+
 		}; // iter
 
 	 public:
-		// set start pointer to string or data
+		using iterator = iter;
+		using const_iterator = iter;
+		using reverse_iterator = std::reverse_iterator<iterator>;
+		using const_reverse_iterator = std::reverse_iterator<const_iterator>;
 
 		static filter default_predicate;
 		// default constructor initialize the data_ to nullptr, length_ to 0 and predicate_ to default_predicate
@@ -102,9 +112,7 @@ namespace fsv {
 		std::size_t length_;
 		// set the predicate function (lambda function)
 		filter predicate_;
-		// friend operator
-		// auto operator==(const filtered_string_view& lhs, const filtered_string_view& rhs) noexcept -> bool;
-		// auto operator!=(const filtered_string_view& lhs, const filtered_string_view& rhs) noexcept -> bool;
+		// friend filtered_string_view;
 	}; // filter_string_view
 	// Non-member operator
 	// Equality operator
