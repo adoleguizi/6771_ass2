@@ -227,3 +227,21 @@ fsv::filtered_string_view::iter::iter(const char* ptr, const filtered_string_vie
 auto fsv::filtered_string_view::iter::operator*() const -> reference {
 	return *ptr_;
 }
+//-> operator
+auto fsv::filtered_string_view::iter::operator->() const -> pointer {
+	return;
+}
+auto fsv::filtered_string_view::iter::operator++() -> iter& {
+	// assume ptr is a pointer to current character
+	if (ptr_) {
+		do {
+			++ptr_; // 指向下一个字符
+		} while (ptr_ < container_->data_ + container_->length_ and !container_->predicate_(*ptr_));
+	}
+	return *this; // 返回自增后的迭代器引用
+}
+auto fsv::filtered_string_view::iter::operator++(int) -> iter {
+	auto temp = *this;
+	++*this;
+	return temp; // 返回自增前的迭代器
+}
