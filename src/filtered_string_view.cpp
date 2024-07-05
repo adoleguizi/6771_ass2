@@ -261,3 +261,15 @@ auto fsv::filtered_string_view::iter::operator--(int) -> iter {
 	--*this;
 	return temp; // 返回自增前的迭代器
 }
+
+// iterator start end
+auto fsv::filtered_string_view::begin() const noexcept -> iter {
+	const char* start = data_;
+	while (start < data_ + length_ and !predicate_(*start)) {
+		++start;
+	}
+	return iter(start, this);
+}
+auto fsv::filtered_string_view::end() const noexcept -> iter {
+	return iter(data_ + length_, this);
+}

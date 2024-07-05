@@ -482,3 +482,27 @@ TEST_CASE("Test substr on filtered_string_view with end boundary", "[substr]") {
 
 	CHECK(result == "ple"); // Should correctly handle the boundary condition
 }
+TEST_CASE("Print via iterator with default predicate", "[filtered_string_view]") {
+	fsv::filtered_string_view fsv1{"corgi"};
+	std::ostringstream oss;
+	std::copy(fsv1.begin(), fsv1.end(), std::ostream_iterator<char>(oss, " "));
+
+	// 检查输出是否符合预期，期望的输出是迭代器逐个打印每个字符，以空格分隔
+	CHECK(oss.str() == "c o r g i ");
+}
+TEST_CASE("Filtered String View Iterator with Vowel Removal Predicate", "[filtered_string_view]") {
+	fsv::filtered_string_view fsv{"samoyed", [](const char& c) {
+		                              return !(c == 'a' || c == 'e' || c == 'i' || c == 'o' || c == 'u');
+	                              }};
+
+	// 使用迭代器遍历filtered_string_view并捕获输出到一个字符串中
+	std::ostringstream oss;
+	std::copy(fsv.begin(), fsv.end(), std::ostream_iterator<char>(oss, ""));
+
+	// 检查输出是否符合预期，应该去除了所有的元音字母
+	CHECK(oss.str() == "smyd");
+}
+TEST_CASE("Test begin and end on empty string", "[filtered_string_view]") {
+	fsv::filtered_string_view empty_fsv{""};
+	CHECK(empty_fsv.begin() == empty_fsv.end());
+}

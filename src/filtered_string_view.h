@@ -68,6 +68,9 @@ namespace fsv {
 		using reverse_iterator = std::reverse_iterator<iterator>;
 		using const_reverse_iterator = std::reverse_iterator<const_iterator>;
 
+		iterator begin() const noexcept;
+		iterator end() const noexcept;
+
 		static filter default_predicate;
 		// default constructor initialize the data_ to nullptr, length_ to 0 and predicate_ to default_predicate
 		filtered_string_view() noexcept;
