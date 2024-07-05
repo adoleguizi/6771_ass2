@@ -5,6 +5,7 @@
 #include <cassert>
 #include <cctype>
 #include <compare>
+#include <cstddef>
 #include <cstring>
 #include <functional>
 #include <iostream>
@@ -23,11 +24,19 @@ namespace fsv {
 		class iter {
 		 public:
 			using MEMBER_TYPEDEFS_GO_HERE = void;
+			// define the iterator
 
-			iter();
+			using iterator_category = std::bidirectional_iterator_tag;
+			using value_type = char;
+			using reference = const char&;
+			using pointer = void;
+			using difference_type = std::ptrdiff_t;
 
-			auto operator*() const -> void; // change this
-			auto operator->() const -> void; // change this
+			//
+			iter() = default;
+
+			auto operator*() const -> reference; // change this
+			auto operator->() const -> pointer; // change this
 
 			auto operator++() -> iter&;
 			auto operator++(int) -> iter;
