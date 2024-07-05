@@ -233,10 +233,11 @@ auto fsv::filtered_string_view::iter::operator->() const -> pointer {
 }
 auto fsv::filtered_string_view::iter::operator++() -> iter& {
 	// assume ptr is a pointer to current character
-	if (ptr_ && *ptr_ != '\0') { // 确保不是空指针且未到达终结符
+	if (ptr_ and ptr_ < container_->data_ + container_->length_) { // 确保不是空指针且未到达终结符
 		do {
 			++ptr_; // 移动到下一个字符
-		} while (*ptr_ != '\0' && !container_->predicate_(*ptr_)); // 继续移动直到找到符合谓词的字符或到达字符串末尾
+		} while (ptr_ < container_->data_ + container_->length_
+		         and !container_->predicate_(*ptr_)); // 继续移动直到找到符合谓词的字符或到达字符串末尾
 	}
 	return *this;
 }
@@ -251,7 +252,7 @@ auto fsv::filtered_string_view::iter::operator--() -> iter& {
 		do {
 			--ptr_; // 移动到下一个字符
 		} while (ptr_ >= container_->data_
-		         && !container_->predicate_(*ptr_)); // 继续移动直到找到符合谓词的字符或到达字符串末尾
+		         and !container_->predicate_(*ptr_)); // 继续移动直到找到符合谓词的字符或到达字符串末尾
 	}
 	return *this;
 }
