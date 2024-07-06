@@ -70,8 +70,8 @@ namespace fsv {
 
 		iterator begin() const noexcept;
 		iterator end() const noexcept;
-		iterator cbegin() const noexcept;
-		iterator cend() const noexcept;
+		const_iterator cbegin() const noexcept;
+		const_iterator cend() const noexcept;
 		reverse_iterator rbegin() const noexcept;
 		reverse_iterator rend() const noexcept;
 		const_reverse_iterator crbegin() const noexcept;
