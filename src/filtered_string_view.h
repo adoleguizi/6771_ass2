@@ -47,7 +47,7 @@ namespace fsv {
 
 			friend auto operator==(const iter& lhs, const iter& rhs) -> bool {
 				// 先检查迭代器是否来自同一个容器
-				return lhs.container_ == rhs.container_ && lhs.ptr_ == rhs.ptr_;
+				return lhs.ptr_ == rhs.ptr_;
 			}
 			friend auto operator!=(const iter& rhs, const iter& lhs) -> bool {
 				return !(lhs == rhs);
