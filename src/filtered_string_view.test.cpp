@@ -562,3 +562,33 @@ TEST_CASE("Filter 'puppy' to remove 'u' and 'y'", "[filtered_string_view]") {
 	CHECK(v[1] == 'p');
 	CHECK(v[2] == 'p');
 }
+TEST_CASE("Reverse iterator test with removal of specific characters", "[rbegin][rend]") {
+	fsv::filtered_string_view s{"milo", [](const char& c) { return !(c == 'i' || c == 'o'); }};
+	std::vector<char> v(s.rbegin(), s.rend());
+	CHECK(v.size() == 2);
+	CHECK(v[0] == 'l');
+	CHECK(v[1] == 'm');
+}
+TEST_CASE("Handling special characters", "[filtered_string_view]") {
+	fsv::filtered_string_view s{"a b\tc", [](const char& c) { return !isspace(c); }};
+	std::vector<char> chars(s.begin(), s.end());
+	CHECK(chars.size() == 3);
+	CHECK(chars[0] == 'a');
+	CHECK(chars[1] == 'b');
+	CHECK(chars[2] == 'c');
+}
+
+TEST_CASE("End boundary conditions", "[filtered_string_view]") {
+	fsv::filtered_string_view s{"abcd", [](const char& c) {
+		                            (void)c;
+		                            return true;
+	                            }};
+	auto it = s.begin();
+	std::advance(it, 4);
+	CHECK(it == s.end());
+}
+TEST_CASE("Single character string not been filtered", "[filtered_string_view]") {
+	fsv::filtered_string_view s{"x", [](const char& c) { return c == 'x'; }};
+	CHECK(*s.begin() == 'x');
+	CHECK(s.begin() != s.end());
+}
