@@ -273,3 +273,17 @@ auto fsv::filtered_string_view::begin() const noexcept -> iter {
 auto fsv::filtered_string_view::end() const noexcept -> iter {
 	return iter(data_ + length_, this);
 }
+auto fsv::filtered_string_view::cbegin() const noexcept -> const_iterator {
+	return begin();
+}
+
+auto fsv::filtered_string_view::cend() const noexcept -> const_iterator {
+	return end();
+}
+auto fsv::filtered_string_view::rbegin() const noexcept -> reverse_iterator {
+	return reverse_iterator(end());
+}
+
+auto fsv::filtered_string_view::rend() const noexcept -> reverse_iterator {
+	return reverse_iterator(begin());
+}

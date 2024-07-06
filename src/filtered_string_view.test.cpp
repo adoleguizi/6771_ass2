@@ -533,3 +533,13 @@ TEST_CASE("Test begin and end on actual data", "[filtered_string_view]") {
 	CHECK(*it == 'd'); // 最后一个字符
 	CHECK(++it == fsv.end());
 }
+TEST_CASE("Check cend() with std::prev", "[filtered_string_view]") {
+	// Input string is "tosa"
+	const auto s = fsv::filtered_string_view("tosa");
+	auto it = s.cend();
+
+	// Check if the reverse iterator works correctly with vowels removed
+	// Assuming we're removing vowels, we should see 's' and 't' instead of 'a' and 's'.
+	CHECK(*std::prev(it, 1) == 'a');
+	CHECK(*std::prev(it, 2) == 's');
+}
