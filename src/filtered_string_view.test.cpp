@@ -72,13 +72,13 @@ TEST_CASE("Copy and Move Constructors") {
 	const auto move = std::move(sv1);
 	CHECK(sv1.data() == nullptr); // true: sv1's guts were moved into `move`
 }
-// TEST_CASE("Copy Assignment") {
-// 	auto pred = [](const char &c) { return c == '4' || c == '2'; };
-// 	auto fsv1 = fsv::filtered_string_view{"42 bro", pred};
-// 	auto fsv2 = fsv::filtered_string_view{};
-// 	fsv2 = fsv1;
-// 	assert(fsv1 == fsv2);
-// }
+TEST_CASE("Copy Assignment") {
+	auto pred = [](const char& c) { return c == '4' || c == '2'; };
+	auto fsv1 = fsv::filtered_string_view{"42 bro", pred};
+	auto fsv2 = fsv::filtered_string_view{};
+	fsv2 = fsv1;
+	CHECK(fsv1 == fsv2);
+}
 TEST_CASE("Move Assignment") {
 	auto pred = [](const char& c) { return c == '8' || c == '9'; };
 	auto fsv1 = fsv::filtered_string_view{"'89 baby", pred};

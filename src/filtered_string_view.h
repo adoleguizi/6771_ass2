@@ -58,7 +58,7 @@ namespace fsv {
 			const char* ptr_;
 			const filtered_string_view* container_;
 
-			friend class filtered_string_view;
+			// friend class filtered_string_view;
 
 		}; // iter
 
