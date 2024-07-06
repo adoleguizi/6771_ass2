@@ -543,3 +543,22 @@ TEST_CASE("Check cend() with std::prev", "[filtered_string_view]") {
 	CHECK(*std::prev(it, 1) == 'a');
 	CHECK(*std::prev(it, 2) == 's');
 }
+TEST_CASE("Filtered String View Iterator with Vowel Removal Predicate reverse iterator") {
+	// 定义一个谓词函数移除所有的元音
+	auto no_vowels = [](const char& c) { return !(c == 'a' || c == 'e' || c == 'i' || c == 'o' || c == 'u'); };
+
+	// 创建一个 filtered_string_view 实例，应用上述谓词
+	const auto s = fsv::filtered_string_view("tosa", no_vowels);
+	auto it = s.cend();
+
+	CHECK(*std::prev(it, 1) == 's');
+	CHECK(*std::prev(it, 2) == 't');
+}
+TEST_CASE("Filter 'puppy' to remove 'u' and 'y'", "[filtered_string_view]") {
+	const auto s = fsv::filtered_string_view{"puppy", [](const char& c) { return !(c == 'u' || c == 'y'); }};
+	auto v = std::vector<char>{s.begin(), s.end()};
+	REQUIRE(v.size() == 3);
+	CHECK(v[0] == 'p');
+	CHECK(v[1] == 'p');
+	CHECK(v[2] == 'p');
+}

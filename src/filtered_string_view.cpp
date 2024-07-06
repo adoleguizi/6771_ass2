@@ -287,3 +287,10 @@ auto fsv::filtered_string_view::rbegin() const noexcept -> reverse_iterator {
 auto fsv::filtered_string_view::rend() const noexcept -> reverse_iterator {
 	return reverse_iterator(begin());
 }
+auto fsv::filtered_string_view::crbegin() const noexcept -> const_reverse_iterator {
+	return const_reverse_iterator(end());
+}
+
+auto fsv::filtered_string_view::crend() const noexcept -> const_reverse_iterator {
+	return const_reverse_iterator(begin());
+}
