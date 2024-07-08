@@ -37,7 +37,30 @@ TEST_CASE("String Constructor with No Matching Characters", "[FilteredStringView
 	// Verify that trying to access any index throws an exception
 	REQUIRE_THROWS_AS(sv.at(0), std::domain_error);
 }
+TEST_CASE("String Constructor with prediccate Multiple Matches", "[FilteredStringView]") {
+	std::string s = "banana";
+	auto pred = [](const char& c) { return c == 'a'; };
+	fsv::filtered_string_view sv{s, pred};
 
+	std::cout << sv.size() << std::endl; // Expected output: 3
+	CHECK(sv.size() == 3);
+}
+TEST_CASE("String Constructor with prediccate All Matches", "[FilteredStringView]") {
+	std::string s = "aaaaaa";
+	auto pred = [](const char& c) { return c == 'a'; };
+	fsv::filtered_string_view sv{s, pred};
+
+	std::cout << sv.size() << std::endl; // Expected output: 6
+	CHECK(sv.size() == 6);
+}
+TEST_CASE("String Constructor with prediccate Empty String", "[FilteredStringView]") {
+	std::string s = "";
+	auto pred = [](const char& c) { return c == 'a'; };
+	fsv::filtered_string_view sv{s, pred};
+
+	std::cout << sv.size() << std::endl; // Expected output: 0
+	CHECK(sv.size() == 0);
+}
 TEST_CASE(" Implicit Null-Terminated String Constructor") {
 	auto sv = fsv::filtered_string_view{"cat"};
 	std::cout << sv.size() << std::endl;
