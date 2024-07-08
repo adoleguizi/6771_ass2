@@ -309,19 +309,7 @@ TEST_CASE("Equality comparison") {
 	CHECK_FALSE(lo == hi);
 	CHECK(lo != hi);
 }
-// TEST_CASE("Equality comparison ignores predicates") {
-// 	const char* text1 = "example";
-// 	const char* text2 = "example";
-// 	auto predicate1 = [](char c) { return c == 'a'; };
-// 	auto predicate2 = [](char c) { return c == 'e'; };
-//
-// 	auto const view1 = fsv::filtered_string_view{text1, predicate1};
-// 	auto const view2 = fsv::filtered_string_view{text2, predicate2};
-//
-// 	// Check if the views are equal despite having different predicates
-// 	CHECK(view1 == view2);
-// 	CHECK_FALSE(view1 != view2);
-// }
+
 TEST_CASE("Equality comparison with identical views") {
 	auto const view1 = fsv::filtered_string_view{"same"};
 	auto const view2 = fsv::filtered_string_view{"same"};
@@ -507,19 +495,18 @@ TEST_CASE("Split with delimiter at the start", "[split]") {
 }
 TEST_CASE("Test substr on filtered_string_view", "[substr]") {
 	auto sv = fsv::filtered_string_view{"Siberian Husky"};
-	auto sub_sv = fsv::substr(sv, 9); // 从索引 9 开始获取子字符串
-	auto result = static_cast<std::string>(sub_sv); // 将 filtered_string_view 转换为 std::string 来检查
+	auto sub_sv = fsv::substr(sv, 9);
+	auto result = static_cast<std::string>(sub_sv);
 
-	CHECK(result == "Husky"); // 检查是否正确获得 "Husky"
+	CHECK(result == "Husky");
 }
 TEST_CASE("Test substr on filtered_string_view with custom predicate", "[substr]") {
-	// 定义一个简单的谓词函数对象，只接受 'S' 和 'D'
 	auto only_SD = [](const char& c) { return c == 'S' || c == 'D'; };
-	// 创建 filtered_string_view 实例，过滤后的字符串应该是 "SD"
+
 	fsv::filtered_string_view sv{"Sled Dog", only_SD};
-	// 测试 substr 获取过滤后的字符串的子字符串
+
 	auto sub_view = fsv::substr(sv, 0, 2);
-	// 使用 CHECK 验证 substr 的结果是否符合预期
+
 	CHECK(static_cast<std::string>(sub_view) == "SD");
 }
 TEST_CASE("Test substr on filtered_string_view with negative start", "[substr]") {
@@ -555,7 +542,6 @@ TEST_CASE("Print via iterator with default predicate", "[filtered_string_view]")
 	std::ostringstream oss;
 	std::copy(fsv1.begin(), fsv1.end(), std::ostream_iterator<char>(oss, " "));
 
-	// 检查输出是否符合预期，期望的输出是迭代器逐个打印每个字符，以空格分隔
 	CHECK(oss.str() == "c o r g i ");
 }
 TEST_CASE("Filtered String View Iterator with Vowel Removal Predicate", "[filtered_string_view]") {
@@ -563,11 +549,9 @@ TEST_CASE("Filtered String View Iterator with Vowel Removal Predicate", "[filter
 		                              return !(c == 'a' || c == 'e' || c == 'i' || c == 'o' || c == 'u');
 	                              }};
 
-	// 使用迭代器遍历filtered_string_view并捕获输出到一个字符串中
 	std::ostringstream oss;
 	std::copy(fsv.begin(), fsv.end(), std::ostream_iterator<char>(oss, ""));
 
-	// 检查输出是否符合预期，应该去除了所有的元音字母
 	CHECK(oss.str() == "smyd");
 }
 TEST_CASE("Test begin and end on empty string", "[filtered_string_view]") {
