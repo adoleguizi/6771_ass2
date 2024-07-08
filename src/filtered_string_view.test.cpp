@@ -138,6 +138,22 @@ TEST_CASE("Subscript") {
 	std::cout << fsv1[2] << std::endl;
 	CHECK(fsv1[2] == '0');
 }
+TEST_CASE("Access Out of Bounds - Returns First Character", "[FilteredStringView]") {
+	auto pred = [](const char& c) { return isdigit(c); };
+	auto sv = fsv::filtered_string_view{"age 21, born 1990", pred};
+	CHECK(sv[10] == 'a'); // Out of bounds, returns first matching character
+}
+TEST_CASE("Access First and Last Valid Index", "[FilteredStringView]") {
+	auto pred = [](const char& c) { return isdigit(c); };
+	auto sv = fsv::filtered_string_view{"age 21, born 1990", pred};
+	CHECK(sv[0] == '2'); // First digit
+	CHECK(sv[static_cast<int>(sv.size()) - 1] == '0'); // Last digit
+}
+TEST_CASE("Repeated Characters", "[FilteredStringView]") {
+	auto pred = [](const char& c) { return c == 'x'; };
+	auto sv = fsv::filtered_string_view{"xxxxxx", pred};
+	CHECK(sv[3] == 'x');
+}
 TEST_CASE("String Type Conversion Basic") {
 	auto sv = fsv::filtered_string_view("vizsla");
 	auto s = static_cast<std::string>(sv);
