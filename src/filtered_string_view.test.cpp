@@ -2,20 +2,6 @@
 
 #include <catch2/catch.hpp>
 
-TEST_CASE("filter me if you can") {
-	// for (char c = std::numeric_limits<char>::min(); c != std::numeric_limits<char>::max(); c++) {
-	// 	std::cout << fsv::filtered_string_view::default_predicate(c);
-	// }
-	auto sv1 = fsv::filtered_string_view{"bulldog"};
-	const auto copy = sv1;
-
-	CHECK(copy.data() == sv1.data()); // pointers compare equal.
-
-	const auto move = std::move(sv1);
-	CHECK(sv1.data() == nullptr); // true: sv1's guts were moved into `move`
-
-	// REQUIRE(false);
-}
 TEST_CASE("Default Constructor") {
 	auto sv = fsv::filtered_string_view{};
 	std::cout << sv.size() << std::endl;
@@ -90,7 +76,15 @@ TEST_CASE("Move Assignment") {
 	CHECK(fsv1.size() == 0);
 	CHECK(fsv1.data() == nullptr);
 }
+TEST_CASE("Verify Pointer Integrity After Copy and Move Operations") {
+	auto sv1 = fsv::filtered_string_view{"bulldog"};
+	const auto copy = sv1;
 
+	CHECK(copy.data() == sv1.data()); // pointers compare equal.
+
+	const auto move = std::move(sv1);
+	CHECK(sv1.data() == nullptr); // true: sv1's guts were moved into `move`
+}
 TEST_CASE("Subscript") {
 	auto pred = [](const char& c) { return c == '9' || c == '0' || c == ' '; };
 	auto fsv1 = fsv::filtered_string_view{"only 90s kids understand", pred};
