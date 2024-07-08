@@ -72,6 +72,30 @@ TEST_CASE("  Null-Terminated String with Predicate Constructor") {
 	std::cout << sv.size();
 	CHECK(sv.size() == 1);
 }
+TEST_CASE("Empty C-String", "[FilteredStringView]") {
+	auto sv = fsv::filtered_string_view{""};
+	CHECK(sv.size() == 0);
+}
+TEST_CASE("C-String with No Matching Characters", "[FilteredStringView]") {
+	auto pred = [](const char& c) { return c == 'z'; };
+	auto sv = fsv::filtered_string_view{"hello", pred};
+	CHECK(sv.size() == 0);
+}
+TEST_CASE("C-String with All Matching Characters", "[FilteredStringView]") {
+	auto pred = [](const char& c) { return c == 'x'; };
+	auto sv = fsv::filtered_string_view{"xxxxxx", pred};
+	CHECK(sv.size() == 6);
+}
+TEST_CASE("Complex Characters in C-String", "[FilteredStringView]") {
+	auto pred = [](const char& c) { return c == '!' || c == '@'; };
+	auto sv = fsv::filtered_string_view{"hi!@hi", pred};
+	CHECK(sv.size() == 2);
+}
+TEST_CASE("C-String with Whitespace", "[FilteredStringView]") {
+	auto pred = [](const char& c) { return std::isspace(static_cast<unsigned char>(c)); };
+	auto sv = fsv::filtered_string_view{"a b c", pred};
+	CHECK(sv.size() == 2);
+}
 TEST_CASE("Copy and Move Constructors") {
 	auto sv1 = fsv::filtered_string_view{"bulldog"};
 	const auto copy = sv1;
