@@ -173,31 +173,42 @@ TEST_CASE("String Type Conversion Memory and Immutability") {
 	s[0] = 'V'; // Change 'v' to 'V' in the std::string
 	REQUIRE(sv.at(0) == 'v'); // Ensure the original view is unchanged
 }
-TEST_CASE("at in vowel with predicate") {
-	auto vowels = std::set<char>{'a', 'A', 'e', 'E', 'i', 'I', 'o', 'O', 'u', 'U'};
-	auto is_vowel = [&vowels](const char& c) { return vowels.contains(c); };
-	auto sv = fsv::filtered_string_view{"Malamute", is_vowel};
-	// CHECK(sv =='a') after implementing == operator
+TEST_CASE("Filtered operator string Conversion", "[StringConversion]") {
+	auto pred = [](const char& c) { return c == 'e' || c == 'o'; };
+	fsv::filtered_string_view sv{"hello", pred};
+	auto s = static_cast<std::string>(sv);
+	CHECK(s == "eo");
 }
-TEST_CASE("AccessEmptyString", "[FilteredStringView]") {
+TEST_CASE("Empty operator string Conversion", "[StringConversion]") {
+	fsv::filtered_string_view sv{""};
+	auto s = static_cast<std::string>(sv);
+	CHECK(s.empty());
+}
+TEST_CASE("Repeated Characters operator string Conversion", "[StringConversion]") {
+	auto pred = [](const char& c) { return c == 'l'; };
+	fsv::filtered_string_view sv{"hello", pred};
+	auto s = static_cast<std::string>(sv);
+	CHECK(s == "ll");
+}
+TEST_CASE("at AccessEmptyString", "[FilteredStringView]") {
 	fsv::filtered_string_view sv{""}; // Create an empty filtered_string_view.
 	// Verify that calling at(0) throws a std::domain_error, as expected.
 	REQUIRE_THROWS_AS(sv.at(0), std::domain_error);
 }
 
-TEST_CASE("AccessBeyondUpperBound", "[FilteredStringView]") {
+TEST_CASE("at AccessBeyondUpperBound", "[FilteredStringView]") {
 	auto pred = fsv::filtered_string_view::default_predicate; // Predicate that accepts all characters
 	fsv::filtered_string_view sv{"hello", pred}; // Create a filtered_string_view with some content.
 	// Verify that accessing beyond the string's length throws a std::domain_error
 	REQUIRE_THROWS_AS(sv.at(5), std::domain_error); // "hello" length is 5, index 5 is out of bounds
 }
-TEST_CASE("AccessNegativeIndex", "[FilteredStringView]") {
+TEST_CASE("at AccessNegativeIndex", "[FilteredStringView]") {
 	auto pred = fsv::filtered_string_view::default_predicate; // Predicate that accepts all characters
 	fsv::filtered_string_view sv{"hello", pred}; // Create a filtered_string_view with some content.
 	// Verify that using a negative index throws a std::domain_error
 	REQUIRE_THROWS_AS(sv.at(-1), std::domain_error); // Negative index is always out of bounds
 }
-TEST_CASE("AccessEmptyStringWithPredicate", "[FilteredStringView]") {
+TEST_CASE("at AccessEmptyStringWithPredicate", "[FilteredStringView]") {
 	auto pred = [](const char& c) { return c == 'a'; }; // Predicate that accepts 'a'
 	fsv::filtered_string_view sv{"banana", pred}; // Create a filtered_string_view.
 	// Verify that accessing index that is valid for the original string but not for filtered results
