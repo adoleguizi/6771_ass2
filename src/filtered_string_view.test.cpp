@@ -469,6 +469,37 @@ TEST_CASE("Split on single character with multiple with other characters") {
 
 	CHECK(v == expected);
 }
+TEST_CASE("Split with empty string returns a single copy of the original", "[split]") {
+	// Prepare an empty filtered_string_view
+	auto sv = fsv::filtered_string_view{""};
+	// Delimiter does not matter in this case as the input string is empty
+	auto tok = fsv::filtered_string_view{"x"};
+	// Perform the split operation
+	auto v = fsv::split(sv, tok);
+	// Expected result is a vector with a single element: an empty filtered_string_view
+	auto expected = std::vector<fsv::filtered_string_view>{sv};
+
+	// Check if the actual vector matches the expected vector
+	CHECK(v == expected);
+}
+// Test where the entire string is the delimiter
+TEST_CASE("Split where string is delimiter", "[split]") {
+	auto sv = fsv::filtered_string_view{"xx"};
+	auto tok = fsv::filtered_string_view{"xx"};
+	auto v = fsv::split(sv, tok);
+	auto expected = std::vector<fsv::filtered_string_view>{"", ""};
+
+	CHECK(v == expected);
+}
+// Test with multiple-character delimiter
+TEST_CASE("Split with multiple-character delimiter", "[split]") {
+	auto sv = fsv::filtered_string_view{"abc--def--ghi"};
+	auto tok = fsv::filtered_string_view{"--"};
+	auto v = fsv::split(sv, tok);
+	auto expected = std::vector<fsv::filtered_string_view>{"abc", "def", "ghi"};
+
+	CHECK(v == expected);
+}
 TEST_CASE("Split with no delimiters present", "[split]") {
 	auto sv = fsv::filtered_string_view{"abc"};
 	auto tok = fsv::filtered_string_view{"x"};
