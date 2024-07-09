@@ -675,3 +675,30 @@ TEST_CASE("Single character string not been filtered", "[filtered_string_view]")
 	CHECK(*s.begin() == 'x');
 	CHECK(s.begin() != s.end());
 }
+TEST_CASE("Reverse iterator on empty string", "[rbegin][rend]") {
+	fsv::filtered_string_view s{"", [](const char& c) {
+		                            (void)c;
+		                            return true;
+	                            }};
+	CHECK(s.rbegin() == s.rend());
+}
+TEST_CASE("Reverse iterator filtering all characters", "[rbegin][rend]") {
+	fsv::filtered_string_view s{"hello", [](const char& c) {
+		                            (void)c;
+		                            return false;
+	                            }};
+	std::vector<char> v(s.rbegin(), s.rend());
+	CHECK(v.empty());
+}
+TEST_CASE("Reverse iterator not filtering any characters", "[rbegin][rend]") {
+	fsv::filtered_string_view s{"data", [](const char& c) {
+		                            (void)c;
+		                            return true;
+	                            }};
+	std::vector<char> v(s.rbegin(), s.rend());
+	CHECK(v.size() == 4);
+	CHECK(v[0] == 'a');
+	CHECK(v[1] == 't');
+	CHECK(v[2] == 'a');
+	CHECK(v[3] == 'd');
+}
