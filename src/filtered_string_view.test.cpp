@@ -702,3 +702,34 @@ TEST_CASE("Reverse iterator not filtering any characters", "[rbegin][rend]") {
 	CHECK(v[2] == 'a');
 	CHECK(v[3] == 'd');
 }
+TEST_CASE("Basic functionality and boundary conditions for filtered_string_view", "[filtered_string_view]") {
+	// Test with empty string
+	fsv::filtered_string_view empty_s{""};
+	CHECK(empty_s.begin() == empty_s.end());
+	CHECK(empty_s.size() == 0);
+	CHECK(empty_s.empty());
+	// Test with single character string, filter passes
+	fsv::filtered_string_view single_s{"a", [](const char& c) { return c == 'a'; }};
+	CHECK(std::distance(single_s.begin(), single_s.end()) == 1);
+	CHECK(*single_s.begin() == 'a');
+	CHECK(single_s.at(0) == 'a');
+	CHECK_THROWS_AS(single_s.at(1), std::domain_error);
+	// Test size and empty with all characters filtered
+	fsv::filtered_string_view no_char_s{"hello", [](const char&) { return false; }};
+	CHECK(no_char_s.size() == 0);
+	CHECK(no_char_s.empty());
+}
+TEST_CASE("Iterator behavior and special method tests for filtered_string_view", "[filtered_string_view][iterators]") {
+	// Reverse iterator test with non-empty string
+	fsv::filtered_string_view reverse_s{"hello", [](const char& c) { return c != 'l'; }};
+	std::vector<char> v(reverse_s.rbegin(), reverse_s.rend());
+	CHECK(std::vector<char>({'o', 'e', 'h'}) == v);
+
+	// Combined method test: substr then check with size and iterators
+	fsv::filtered_string_view combo_s{"hello world", [](const char& c) { return c != ' '; }};
+	auto sub_s = fsv::substr(combo_s, 0, 5); // Expected to get "hello"
+	CHECK(sub_s.size() == 5);
+	CHECK(std::distance(sub_s.begin(), sub_s.end()) == 5);
+	std::vector<char> chars(sub_s.begin(), sub_s.end());
+	CHECK(std::vector<char>({'h', 'e', 'l', 'l', 'o'}) == chars);
+}
