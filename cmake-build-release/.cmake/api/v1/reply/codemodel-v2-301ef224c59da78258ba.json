@@ -1,0 +1,78 @@
+{
+	"configurations" : 
+	[
+		{
+			"directories" : 
+			[
+				{
+					"build" : ".",
+					"jsonFile" : "directory-.-Release-f5ebdc15457944623624.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.0"
+					},
+					"projectIndex" : 0,
+					"source" : ".",
+					"targetIndexes" : 
+					[
+						0,
+						1,
+						2
+					]
+				}
+			],
+			"name" : "Release",
+			"projects" : 
+			[
+				{
+					"directoryIndexes" : 
+					[
+						0
+					],
+					"name" : "COMP6771_LAB_001",
+					"targetIndexes" : 
+					[
+						0,
+						1,
+						2
+					]
+				}
+			],
+			"targets" : 
+			[
+				{
+					"directoryIndex" : 0,
+					"id" : "catch2_main::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-catch2_main-Release-ea2d2cb5e536d44d32b4.json",
+					"name" : "catch2_main",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "filtered_string_view::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-filtered_string_view-Release-c074ee4e7307a4ef9af3.json",
+					"name" : "filtered_string_view",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "filtered_string_view_test::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-filtered_string_view_test-Release-afc03199242b0ac734e4.json",
+					"name" : "filtered_string_view_test",
+					"projectIndex" : 0
+				}
+			]
+		}
+	],
+	"kind" : "codemodel",
+	"paths" : 
+	{
+		"build" : "/mnt/e/6771_T2/ass2/cmake-build-release",
+		"source" : "/mnt/e/6771_T2/ass2"
+	},
+	"version" : 
+	{
+		"major" : 2,
+		"minor" : 4
+	}
+}
